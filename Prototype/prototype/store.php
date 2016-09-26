@@ -30,7 +30,7 @@ and open the template in the editor.
                 while ($row = mysqli_fetch_array($result)){
                     echo "<p>Title : " . htmlentities($row["name"]) . "</p>";
                     echo "<p>Description : " . htmlentities($row["description"]) . "</p>";
-                    echo "<p>Description : " . $row["description"] . "</p>";
+                    
                     $newResult = mysqli_query($con, "SELECT attribute, value FROM attributes WHERE product_id=\"" . htmlentities($row["PID"]) . "\"");
                     $genre = 0;
                     while ($newRow = mysqli_fetch_array($newResult)){    
