@@ -8,48 +8,49 @@ and open the template in the editor.
     <head>
         <meta charset="UTF-8">
         <title>Store</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        <link rel="stylesheet" type="text/css" href="../Styles/store.css">
     </head>
     <body>
-        <h1>Available Products</h1>
-        <?php 
+        <h1 class="left-justify">Available Products</h1>
+        <div class="container left-justify narrow">
+            <?php
+            require_once '../Includes/db.php';
+            $db = StoreDB::getInstance();
             $value = $_GET["type"];
-        
-            $con = mysqli_connect("localhost", "phpuser", "phpuserjb");
-            if (!$con) {
-                exit('Connect Error (' . mysqli_connect_errno() . ') '
-                . mysqli_connect_error());
-            }
-            mysqli_set_charset($con, 'utf-8');
 
-            mysqli_select_db($con, "ecommerce");
-            
-            foreach ($value as $type){
+            foreach ($value as $type) {
+                //echo "<div class=\"row\">";
                 echo "<p><h2>" . $type . "</h2></p>";
-                $result = mysqli_query($con, "SELECT PID, name, image, description, price FROM products WHERE type=\"" . $type . "\"");
-                
-                while ($row = mysqli_fetch_array($result)){
-                    echo "<p>Title : " . htmlentities($row["name"]) . "</p>";
+
+                $result = $db->get_products_by_type($type);
+                while ($row = mysqli_fetch_array($result)) {
+                    echo "<div class=\"thumb\"><img src=" . htmlentities($row["image"]) . "></div>";
+                    echo "Title : " . htmlentities($row["name"]);
                     echo "<p>Description : " . htmlentities($row["description"]) . "</p>";
-                    
-                    $newResult = mysqli_query($con, "SELECT attribute, value FROM attributes WHERE product_id=\"" . htmlentities($row["PID"]) . "\"");
+
+                    $attributes = $db->get_attributes_by_product_id(htmlentities($row["PID"]));
                     $genre = 0;
-                    while ($newRow = mysqli_fetch_array($newResult)){    
-                        if ($newRow["attribute"] == "genre") {
-                            if ($genre > 0){
-                                echo ", " . $newRow["value"];
+                    while ($attributesRow = mysqli_fetch_array($attributes)) {
+                        if ($attributesRow["attribute"] == "genre") {
+                            if ($genre > 0) {
+                                echo ", " . $attributesRow["value"];
                             } else {
-                                echo "Genre : " . $newRow["value"];
+                                echo "Genre : " . $attributesRow["value"];
                             }
                             $genre++;
                         } else {
-                            echo "<p>" . htmlentities(ucfirst($newRow["attribute"])) . " : " . htmlentities($newRow["value"]) . "</p>";
+                            echo "<p>" . htmlentities(ucfirst($attributesRow["attribute"])) . " : " . htmlentities($attributesRow["value"]) . "</p>";
                         }
                     }
                     echo "<p>Price: " . htmlentities($row["price"]) . "</p>";
-
-                }   
+                    mysqli_free_result($attributes);
+                }
+                mysqli_free_result($result);
+                //echo "</div>";
             }
-        ?>
-      
+            ?>
+
+        </div>
     </body>
 </html>
