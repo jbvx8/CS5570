@@ -35,7 +35,7 @@ class StoreDB extends mysqli {
         trigger_error('Deserializaing is not allowed.', E_USER_ERROR);
     }
     
-    // private constructor
+    // constructor needs to be public because class extends mysqli?
     public function __construct() {
         parent::__construct($this->dbHost, $this->user, $this->pass, $this->dbName);
         if (mysqli_connect_error()) {
@@ -56,8 +56,9 @@ class StoreDB extends mysqli {
                 . $type . "\"");
     }
     
-    public function get_attributes_by_product_id($pid) {
-        return $this->query("SELECT attribute, value FROM attributes WHERE product_id=\"" . $pid . "\"");
+    public function get_first_attributes_by_product_id($pid) {
+        return $this->query("SELECT attribute, value FROM attributes WHERE product_id=\"" 
+                . $pid . "\" AND level='1'");
     }
 }
 
