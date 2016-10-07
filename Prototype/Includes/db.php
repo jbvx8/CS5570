@@ -60,6 +60,11 @@ class StoreDB extends mysqli {
         return $this->query("SELECT attribute, value FROM attributes WHERE product_id=\"" 
                 . $pid . "\" AND level='1'");
     }
+    
+    public function get_cart_variables($ids) {
+        return $this->query("SELECT PID, name, price FROM products WHERE PID IN (" 
+                . $ids . ") ORDER BY name");
+    }
 }
 
 

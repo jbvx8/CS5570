@@ -22,10 +22,14 @@ include '../Includes/layout_header.php';
 $action = isset($_GET['action']) ? $_GET['action'] : "";
 $product_id = isset($_GET['product_id']) ? $_GET['product_id'] : "1";
 $name = isset($_GET['name']) ? $_GET['name'] : "";
+
  
 if($action=='added'){
-    echo "<div class='alert alert-info'>";
-        echo "<strong>{$name}</strong> was added to your cart!";
+    echo "<div class='alert alert-info alert-dismissible'>";
+        echo "<button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+            <span aria-hidden='true'>&times;</span>
+            </button>";
+        echo "<strong>" . $name . "</strong> was added to your cart!";
     echo "</div>";
 }
  
@@ -39,9 +43,13 @@ if($action=='exists'){
             
             
             $db = StoreDB::getInstance();
-            $value = $_GET["type"];
+            //$value = $_GET["type"];
+            $types = $db->get_all_types();
+            while ($r = mysqli_fetch_array($types)) {
+                $type = htmlentities($r["type"]);
+            
 
-            foreach ($value as $type) {
+            //foreach ($value as $type) {
                 //echo "<div class=\"row\">";
                 echo "<p><h2>" . $type . "</h2></p>";
                 echo "<div class=\"row\">";
@@ -73,7 +81,7 @@ if($action=='exists'){
                     echo "<p>Price: " . htmlentities($row["price"]) . "</p>";
                     mysqli_free_result($attributes);
                     echo "";
-                    echo "<a href='add_to_cart.php?id=\"" . $PID . "\"&name=\"" . $name . "\"class='btn btn-primary'>";
+                    echo "<a href='cart_session.php?id={$PID}&name={$name}' class='btn btn-primary'>";
                         echo "<span class='glyphicon glyphicon-shopping-cart'></span> Add to cart";
                     echo "</a>";
                     echo "</div>";
@@ -81,7 +89,9 @@ if($action=='exists'){
                 mysqli_free_result($result);
                 
                 echo "</div>";
+            
             }
+            mysqli_free_result($types);
             
 
 //        </div>

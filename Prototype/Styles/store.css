@@ -9,7 +9,7 @@ and open the template in the editor.
 */
 
 .thumb img {
-    width: 100px;    
+    height: 200px;    
 }
 
 
@@ -21,3 +21,10 @@ and open the template in the editor.
     width: 300px;
 }
 
+.row {
+    position: relative;
+}
+.row a {
+    position: absolute;
+    bottom: 0;
+}
