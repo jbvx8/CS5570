@@ -15,21 +15,7 @@ and open the template in the editor.
         <div class="container">
             <div class="jumbotron top-pad">
 		<h1><span class="glyphicon glyphicon-shopping-cart"></span> Welcome to the Web Store!</h1>
-		<p>What would you like to buy?</p>
-                <form action="store.php">
-               
-                <?php
-                    require_once("../Includes/db.php");
-                    $result= StoreDB::getInstance()->get_all_types();
-                    while ($row= mysqli_fetch_array($result)) {
-                        echo "<p><input type=\"checkbox\" name=\"type[]\" value=\"" 
-                        . htmlentities($row["type"]) . "\" /> " . htmlentities($row["type"]) . "</p>";
-                    }
-                    mysqli_free_result($result);      
-                ?>
-            
-                <button class="btn btn-default" type="submit">Shop</button>
-                </form>
+                <a href="store.php" class="btn btn-primary pull-right">Shop</a>
         
             </div>
         </div>
