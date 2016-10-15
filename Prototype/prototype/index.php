@@ -11,7 +11,7 @@ and open the template in the editor.
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
         <link rel="stylesheet" type="text/css" href="../Styles/prototype.css">
     </head>
-    <body>      
+    <body>     
         <div class="container">
             <div class="jumbotron top-pad">
 		<h1><span class="glyphicon glyphicon-shopping-cart"></span> Welcome to the Web Store!</h1>

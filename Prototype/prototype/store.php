@@ -22,6 +22,7 @@ include '../Includes/layout_header.php';
 $action = isset($_GET['action']) ? $_GET['action'] : "";
 $product_id = isset($_GET['product_id']) ? $_GET['product_id'] : "1";
 $name = isset($_GET['name']) ? $_GET['name'] : "";
+$quantity = isset($_GET['quantity']) ? $_GET['quantity'] : "";
 
  
 if($action=='added'){
@@ -35,11 +36,12 @@ if($action=='added'){
  
 if($action=='exists'){
     echo "<div class='alert alert-info'>";
-        echo "<strong>{$name}</strong> already exists in your cart!";
+        echo "<strong>{$name}</strong> already exists in your cart; {$quantity} more added!";
     echo "</div>";
 }
 
-  echo "<div class=\"container left-justify\">";
+  echo "<div class='container'>
+        <div class='row'>";
             
             
             $db = StoreDB::getInstance();
@@ -51,40 +53,38 @@ if($action=='exists'){
 
             //foreach ($value as $type) {
                 //echo "<div class=\"row\">";
-                echo "<p><h2>" . $type . "</h2></p>";
-                echo "<div class=\"row\">";
+                echo "<h2>" . $type . "</h2>";
+                
                 $result = $db->get_products_by_type($type);
                 while ($row = mysqli_fetch_array($result)) {
                     $name = htmlentities($row["name"]);
                     $PID = htmlentities($row["PID"]);
                     
-                    echo "<div class=\"col-md-3\">";
-                    echo "<div class=\"thumb\"><img src=" . htmlentities($row["image"]) . "></div>";
+                    echo "<div class='col-md-3'>
+                        <div class='thumb'><img src=" . htmlentities($row["image"]) . "></div>      
                     
-                    echo "Title : " . $name;
+                            Title : " . $name;
                     //echo "<p>Description : " . htmlentities($row["description"]) . "</p>";
 
                     $attributes = $db->get_first_attributes_by_product_id($PID);
-                    $genre = 0;
+                    //$genre = 0;
                     while ($attributesRow = mysqli_fetch_array($attributes)) {
-//                        if ($attributesRow["attribute"] == "genre") {
-//                            if ($genre > 0) {
-//                                echo ", " . $attributesRow["value"];
-//                            } else {
-//                                echo "Genre : " . $attributesRow["value"];
-//                            }
-//                            $genre++;
-//                        } else {
-                            echo "<p>" . htmlentities(ucfirst($attributesRow["attribute"])) . " : " . htmlentities($attributesRow["value"]) . "</p>";
-                        //}
+                        echo "<p>" . htmlentities(ucfirst($attributesRow["attribute"])) . " : " . htmlentities($attributesRow["value"]) . "</p>";                        
                     }
                     echo "<p>Price: " . htmlentities($row["price"]) . "</p>";
                     mysqli_free_result($attributes);
-                    echo "";
-                    echo "<a href='cart_session.php?id={$PID}&name={$name}' class='btn btn-primary'>";
-                        echo "<span class='glyphicon glyphicon-shopping-cart'></span> Add to cart";
-                    echo "</a>";
-                    echo "</div>";
+                    //echo "";
+//                    echo "<a href='cart_session.php?id={$PID}&name={$name}' class='btn btn-primary'>
+//                        <span class='glyphicon glyphicon-shopping-cart'></span> Add to cart
+//                    </a>
+//                    </div>";
+                    echo "<form action='cart_session.php'>
+                        <input type='text' name='quantity' placeholder='0' size='2' />
+                        <input type='hidden' name='id' value='" . $PID . "'/>
+                        <input type='hidden' name='name' value='" . $name . "'/>
+                        <button type='submit' class='btn btn-primary'><span class='glyphicon glyphicon-shopping-cart'></span>
+                        Add to cart</button>
+                        </form></div>";
                 }
                 mysqli_free_result($result);
                 
@@ -92,7 +92,7 @@ if($action=='exists'){
             
             }
             mysqli_free_result($types);
-            
+            echo "</div>";
 
 //        </div>
 //    </body>

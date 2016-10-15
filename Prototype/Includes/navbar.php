@@ -22,7 +22,13 @@ if(!isset($_SESSION['cart_products'])) {
           <!-- fix links -->
         
         <li class="active">
-            <a href="cart.php"><?php $count=count($_SESSION["cart_products"]);?>
+            <a href="cart.php">
+                <?php 
+                $count=0;
+                foreach($_SESSION["cart_products"] as $quantity => $value) {
+                    $count += $value;
+                }
+                ;?>
                 Cart <span class='badge' id="comparison-count"><?php echo $count;?></span>
             </a>
         </li>
