@@ -17,17 +17,18 @@ $cart = $_SESSION['cart_products'];
 if(count($cart) > 0){
 //    $PIDs = "";
 //    $quantities = "";
-    echo "Cart count: " . count($cart);
+//    echo "Cart count: " . count($cart);
     $subtotal = 0;
     $price = 0;
     $quantity = 0;
     $name = '';
-    echo "<table class= 'table table-hover table-responsive table-bordered'>
+    echo "<table class= 'table table-hover table-responsive table-bordered' id='cartTable'>
         <tr>
             <th class='textAlignLeft'>Product Name</th>
             <th>Price</th>
             <th>Quantity</th>
             <th>Total</th>
+            <th></th>
         </tr>";
     
     foreach($cart as $PID => $value){
@@ -36,8 +37,8 @@ if(count($cart) > 0){
 //            echo "KEY: " . $key . "<br>";
 //            echo "VALUE: " . $final_val . "<br>";
 //            if ($key == 'PID') {
-                echo "PID: " . $PID;
-                echo "quantity: " . $value;
+//                echo "PID: " . $PID;
+//                echo "quantity: " . $value;
                 //$PIDS = $PIDs . $final_val . ",";
                 $result = $db->get_cart_variables($PID);
                 while($row = mysqli_fetch_array($result)) {
@@ -59,6 +60,11 @@ if(count($cart) > 0){
                 <td>" . $price . "</td>
                 <td>" . $value . "</td>
                 <td>" . $total . "</td>
+                <td><form name='removeForm'>
+                    <input type='hidden' name='id' value='" . $PID . "'/>
+                    <button class='btnRemove' type='submit' value='remove'>Remove</button></td>
+                    </form>
+                </td>
             </tr>";
         
         $subtotal += $total;
@@ -96,5 +102,10 @@ else {
         </form>";
     echo "</div>";    
 }
-include '../Includes/layout_footer.php';
+
+
+
+?>
+<script src='../Scripts/cart.js'></script>
+<?php include '../Includes/layout_footer.php'; ?>
 
