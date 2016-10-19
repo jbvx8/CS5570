@@ -1,3 +1,8 @@
+function showDiv(id){
+    document.getElementById(id).style.display="block";
+}
+
+
 
 $(document).ready(function(){
     $('.btnRemove').click(function(){
@@ -13,4 +18,6 @@ $(document).ready(function(){
         });
     });
 });
+
+
 

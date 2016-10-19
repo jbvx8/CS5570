@@ -13,7 +13,7 @@ if(!isset($_SESSION['cart_products'])) {
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="#">Home</a>
+      <a class="navbar-brand" href="store.php">Home</a>
     </div>
 
     <!-- Collect the nav links, forms, and other content for toggling -->
@@ -32,7 +32,7 @@ if(!isset($_SESSION['cart_products'])) {
                 Cart <span class='badge' id="comparison-count"><?php echo $count;?></span>
             </a>
         </li>
-        <li class="active"><a href="#">Checkout </a></li>
+        <li class="active"><a href="checkout.php">Checkout </a></li>
       </ul>
       <form class="navbar-form navbar-left">
         <div class="form-group">

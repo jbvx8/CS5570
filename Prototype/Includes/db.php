@@ -65,6 +65,12 @@ class StoreDB extends mysqli {
         return $this->query("SELECT PID, name, price FROM products WHERE PID =\"" 
                 . $id . "\"");
     }
+    
+    public function insert_customer($last, $first, $address1, $address2, $city, $state, $zip, $phone, $email) {
+        return $this->query("INSERT INTO customers (last_name, first_name, address_line1, address_line2, city, state, zip, phone, email)
+          VALUES('" . $last . "', '" . $first . "', '" . $address1 . "', '" . $address2 . "', '" 
+                . $city . "', '" . $state . "', '" . $zip . "', '" . $phone . "', '" . $email . "')");
+    }
 }
 
 

@@ -92,7 +92,13 @@ if(count($cart) > 0){
         </tr>
     </table>";
     
-    echo "<a href='#' class='btn btn-default'>Checkout</a>";
+    echo "<button id='checkoutButton' class='btn btn-default' 
+        onclick='this.style.display=&quot;none&quot;;showDiv(checkoutDiv.id)'>Checkout</button>
+       
+        <div id='checkoutDiv' style='display:none;'>
+            <a href='checkout.php' class='btn btn-default'>Checkout as Guest</a>
+            <a href='#' class='btn btn-default'>Login</a>
+        </div>";
 }
 else {
     echo "<div class='alert alert-danger'>
@@ -106,6 +112,6 @@ else {
 
 
 ?>
-<script src='../Scripts/cart.js'></script>
+<script src='../Scripts/cart.js' type="text/javascript"></script>
 <?php include '../Includes/layout_footer.php'; ?>
 
