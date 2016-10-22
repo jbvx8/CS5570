@@ -67,9 +67,32 @@ class StoreDB extends mysqli {
     }
     
     public function insert_customer($last, $first, $address1, $address2, $city, $state, $zip, $phone, $email) {
-        return $this->query("INSERT INTO customers (last_name, first_name, address_line1, address_line2, city, state, zip, phone, email)
+        if ($this->query("INSERT INTO customers (last_name, first_name, address_line1, address_line2, city, state, zip, phone, email)
           VALUES('" . $last . "', '" . $first . "', '" . $address1 . "', '" . $address2 . "', '" 
-                . $city . "', '" . $state . "', '" . $zip . "', '" . $phone . "', '" . $email . "')");
+                . $city . "', '" . $state . "', '" . $zip . "', '" . $phone . "', '" . $email . "')")) {
+            return mysqli_insert_id($this);
+        }
+        throw new Exception("Could not insert customer. Try again or start over.");
+        
+    }
+    
+    public function insert_order($customer, $subtotal, $shipping, $tax, $total) {
+        $date = date('Y-m-d H:i:s');
+        if ($this->query("INSERT INTO orders (customer, date, subtotal, shipping, tax, total) VALUES('" . $customer . "', '" . $date . "', '"
+                . $subtotal . "', '" . $shipping . "', '" . $tax . "', '" . $total . "')")){
+            return mysqli_insert_id($this);         
+        }
+        throw new Exception("Could not insert order. Try again or start over.");
+    }
+    
+    public function insert_order_products($orderID, $products) {
+        foreach ($products as $key => $value) {
+            if (!$this->query("INSERT INTO order_products(order_id, product_id, product_quantity) VALUES('" . $orderID . "', '"
+                    . $key . "', '" . $value . "')")) {
+                throw new Exception("Could not insert products. Try again or start over.");
+            }
+        }
+        return true;
     }
 }
 

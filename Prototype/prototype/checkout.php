@@ -4,6 +4,18 @@ session_start();
 $page_title="Checkout";
 include '../Includes/layout_header.php';
 
+$action = isset($_GET['action']) ? $_GET['action'] : "";
+$message = isset($_GET['message']) ? $_GET['message'] : "";
+
+if($action=='exception'){
+    echo "<div class='alert alert-danger alert-dismissible'>";
+        echo "<button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+            <span aria-hidden='true'>&times;</span>
+            </button>
+        <strong>{$message}</strong>
+    </div>";
+}
+
 $db = StoreDB::getInstance();
 
 //$action = isset($_GET['action']) ? $_GET['action'] : "";
@@ -27,7 +39,6 @@ if(count($cart) > 0){
             <th>Price</th>
             <th>Quantity</th>
             <th>Total</th>
-            <th></th>
         </tr>";
     
     foreach($cart as $PID => $value){
@@ -59,15 +70,15 @@ if(count($cart) > 0){
                 <td>" . $price . "</td>
                 <td>" . $value . "</td>
                 <td>" . $total . "</td>
-                <td><form name='removeForm'>
-                    <input type='hidden' name='id' value='" . $PID . "'/>
-                    <button class='btnRemove' type='submit' value='remove'>Remove</button></td>
-                    </form>
-                </td>
             </tr>";
         
         $subtotal += $total;
-    }  
+    }
+    
+    $taxRate = .05475;
+    $tax = $subtotal * $taxRate;
+    $shipping = calculateShipping($subtotal);
+    $grandTotal = $subtotal + $tax + $shipping;
     
     echo "<tr>
             <td><strong>Subtotal</strong></td>
@@ -75,8 +86,27 @@ if(count($cart) > 0){
             <td></td>
             <td><strong>" . $subtotal . "</strong></td>
         </tr>
+        <tr>
+            <td>Sales Tax</td>
+            <td></td>
+            <td></td>
+            <td>" . number_format($tax, 2) . "</td>
+        </tr>
+        <tr>
+            <td>Shipping</td>
+            <td></td>
+            <td></td>
+            <td>" . number_format($shipping, 2) . "</td>
+        </tr>
+        <tr>
+            <td><strong>Total to be Charged</strong></td>
+            <td></td>
+            <td></td>
+            <td><strong>" . number_format($grandTotal, 2) . "</strong></td>
+        </tr>
     </table>
-    <a href='store.php' class='btn btn-default'>Continue Shopping</a>";
+    <a href='store.php' class='btn btn-default'>Continue Shopping</a>
+    <a href='cart.php' class='btn btn-default'>Edit Cart</a>";
     
 //    echo "<a href='checkout.php' class='btn btn-default'>Checkout</a>
 //        <button onclick='showDiv(checkoutDiv)'>Checkout</button>
@@ -127,7 +157,6 @@ else {
       <div class="col-md-2">
 	<label for="inputState">State</label>	
         <select class="form-control" id="inputState" name="inputState">
-            <option value="">N/A</option>
             <option value="AK">Alaska</option>
             <option value="AL">Alabama</option>
             <option value="AR">Arkansas</option>
@@ -217,13 +246,38 @@ else {
         <input type="text" class="form-control" id="inputCCExp" name="inputCCExp" placeholder="MMYY" pattern="[0-9]{4}" required title="Format must be MMYY">
       </div>
       <div class="col-md-2">
-        <label for="inputCCV">CCV</label>
-        <input type="text" class="form-control" id="inputCCV" name="inputCCV" pattern="[0-9]{3}" required title="Not a valid CCV">
+        <label for="inputCVV">CVV</label>
+        <input type="text" class="form-control" id="inputCVV" name="inputCVV" pattern="[0-9]{3}" required title="Not a valid CVV">
       </div>
   </div>
+  
+<?php echo "<input type='hidden' name='subtotal' value='" . $subtotal . "'/>
+  <input type='hidden' name='shipping' value='" . $shipping . "'/>
+  <input type='hidden' name='tax' value='" . $tax . "'/>
+  <input type='hidden' name='total' value='" . $grandTotal . "'/>"; ?>
+  
   
   <input type="submit" class="btn btn-primary">
 </form>
 
 
-<?php include '../Includes/layout_footer.php';?>
+<?php include '../Includes/layout_footer.php';
+
+function calculateShipping($total) {
+    if ($total < 10) {
+        return 1.99;
+    } else if ($total < 20) {
+        return 2.99;
+    } else if ($total < 30) {
+        return 3.99;
+    } else if ($total < 40) {
+        return 4.99;
+    } else if ($total < 50) {
+        return 5.99;
+    } else {
+        return 0;
+    }
+}
+
+
+?>

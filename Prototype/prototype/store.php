@@ -24,20 +24,23 @@ $product_id = isset($_GET['product_id']) ? $_GET['product_id'] : "1";
 $name = isset($_GET['name']) ? $_GET['name'] : "";
 $quantity = isset($_GET['quantity']) ? $_GET['quantity'] : "";
 
- 
+
 if($action=='added'){
     echo "<div class='alert alert-info alert-dismissible'>";
         echo "<button type='button' class='close' data-dismiss='alert' aria-label='Close'>
             <span aria-hidden='true'>&times;</span>
-            </button>";
-        echo "<strong>" . $name . "</strong> was added to your cart!";
-    echo "</div>";
+            </button>
+        <strong>{$name}</strong> was added to your cart!
+    </div>";
 }
  
 if($action=='exists'){
-    echo "<div class='alert alert-info'>";
-        echo "<strong>{$name}</strong> already exists in your cart; {$quantity} more added!";
-    echo "</div>";
+    echo "<div class='alert alert-info alert-dismissible'>
+        <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+        <span aria-hidden='true'>&times;</span>
+        </button>
+        <strong>{$name}</strong> already exists in your cart; {$quantity} more added!
+    </div>";
 }
 
   echo "<div class='container'>
