@@ -3,9 +3,9 @@ session_start();
 include "../Includes/db.php";
 
 function verify_payment(){
-    if (randBool()){
-        return true;
-    }
+//    if (randBool()){
+//        return true;
+//    }
     throw new Exception("Credit card declined by bank. Try entering a new card.");  
   }
 
@@ -57,6 +57,7 @@ try{
     verify_payment();
     unset($_SESSION['cart_products']);
     $db->commit();
+    header("Location: order_confirmation.php?order_id=" . $orderID);
 } catch (Exception $ex) {
     $db->rollback();
     header("Location: checkout.php?action=exception&message=" . $ex->getMessage());
