@@ -1,6 +1,11 @@
 <?php
+
 if(!isset($_SESSION['cart_products'])) {
     $_SESSION['cart_products'] = array();
+} 
+if(isset($_GET['logout'])) {
+    unset($_SESSION['username']);
+    unset($_SESSION['password']);
 }
 ?>
 
@@ -41,8 +46,27 @@ if(!isset($_SESSION['cart_products'])) {
         <button type="submit" class="btn btn-default">Submit</button>
       </form>
       <ul class="nav navbar-nav navbar-right">
-          <li><a href="<?php echo "../prototype/login.php?location=" . urlencode($_SERVER['REQUEST_URI']);?>">Login</a></li>
-        <li><a href="#">Register</a></li>
+          <?php if (!isset($_SESSION['username'])) { ?>
+              <li><a href="<?php echo "../prototype/login.php?location=" . urlencode($_SERVER['REQUEST_URI']);?>">Login</a></li>
+              <li><a href="#">Register</a></li>
+          <?php } else { 
+              if (isset($_SESSION['name'])) { 
+                  echo "<li><p class='navbar-text'>Welcome, " . $_SESSION['name'] . "!</p></li>";
+              }
+              else {
+                  echo "<li><p class='navbar-text'>Welcome, " . $_SESSION['username'] . "!</p></li>";
+              } ?>
+              <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">My Account <span class="caret"></span></a>
+                  <ul class="dropdown-menu">
+                    <li><a href="#">Orders</a></li>
+                    <li><a href="#">Settings</a></li>
+                    <li role="separator" class="divider"></li>
+                    <li><a href="?logout=true">Logout</a></li>
+                  </ul>
+              </li>
+              <li><a href="?logout=true">Logout</a></li>
+          <?php } ?>
       </ul>
     </div><!-- /.navbar-collapse -->
   </div>
