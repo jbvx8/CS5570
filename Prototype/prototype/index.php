@@ -10,8 +10,10 @@
             <div class="jumbotron top-pad-100">
 		<h1><span class="glyphicon glyphicon-shopping-cart"></span> Welcome to the Web Store!</h1>
                 <a href="store.php" class="btn btn-primary btn-lg btn-block top-pad-50">Shop</a>
+                
         
             </div>
         </div>
+        <?php echo phpinfo(); ?>
     </body>
 </html>

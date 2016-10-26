@@ -41,7 +41,7 @@ if(!isset($_SESSION['cart_products'])) {
         <button type="submit" class="btn btn-default">Submit</button>
       </form>
       <ul class="nav navbar-nav navbar-right">
-        <li><a href="#">Login</a></li>
+          <li><a href="<?php echo "../prototype/login.php?location=" . urlencode($_SERVER['REQUEST_URI']);?>">Login</a></li>
         <li><a href="#">Register</a></li>
       </ul>
     </div><!-- /.navbar-collapse -->

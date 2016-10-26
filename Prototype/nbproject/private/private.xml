@@ -5,7 +5,8 @@
         <group>
             <file>file:/E:/CS5570_clone/CS5570/Prototype/Includes/db.php</file>
             <file>file:/E:/CS5570_clone/CS5570/Prototype/prototype/store.php</file>
-            <file>file:/E:/CS5570_clone/CS5570/Prototype/prototype/cart_session.php</file>
+            <file>file:/E:/CS5570_clone/CS5570/Prototype/prototype/checkout.php</file>
+            <file>file:/E:/CS5570_clone/CS5570/Prototype/prototype/order_process.php</file>
             <file>file:/E:/CS5570_clone/CS5570/Prototype/prototype/cart.php</file>
         </group>
     </open-files>

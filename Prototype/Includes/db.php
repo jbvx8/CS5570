@@ -1,11 +1,5 @@
 <?php
 
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 class StoreDB extends mysqli {
     // single instance of self shared among all instances
     private static $instance = null;
@@ -93,6 +87,23 @@ class StoreDB extends mysqli {
             }
         }
         return true;
+    }
+    
+    public function insert_user($username, $password) {
+        return $this->query("INSERT INTO users (username, password) VALUES ('" . $username . "', '" . $password . "')");
+    }
+    
+    public function verify_user($username, $password) {
+        //$answer = $this->query("SELECT * FROM users WHERE username='" . $username . "' AND password='" . $password . "'");
+         $result = $this->query("SELECT * FROM users WHERE username='" . $username . "' AND password='" . $password . "'");
+         if (mysqli_num_rows($result) > 0) {
+             return true;
+         }
+         return false;
+    }
+    
+    public function get_name_from_username($username) {
+        return $this->query("SELECT first_name FROM customers WHERE user_name='" . $username . "'");
     }
 }
 
