@@ -3,9 +3,9 @@ session_start();
 include "../Includes/db.php";
 
 function verify_payment(){
-//    if (randBool()){
-//        return true;
-//    }
+    if (randBool()){
+        return true;
+    }
     throw new Exception("Credit card declined by bank. Try entering a new card.");  
   }
 
@@ -51,7 +51,14 @@ $db = StoreDB::getInstance();
 
 try{
     $db->begin_transaction();
-    $custID = $db->insert_customer($last, $first, $address1, $address2, $city, $state, $zip, $phone, $email);
+    if (!isset($_SESSION['username'])) {
+        $custID = $db->insert_customer($last, $first, $address1, $address2, $city, $state, $zip, $phone, $email);
+    } else {
+        $custID = $db->get_customer_from_username($_SESSION['username']);
+        if (!$custID) {
+            $custID = $db->insert_customer($last, $first, $address1, $address2, $city, $state, $zip, $phone, $email);
+        }
+    }
     $orderID = $db->insert_order($custID, $subtotal, $shipping, $tax, $total);
     $db->insert_order_products($orderID, $_SESSION['cart_products']);
     verify_payment();

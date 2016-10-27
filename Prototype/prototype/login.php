@@ -13,7 +13,7 @@ if (count($_POST) > 0) {
             $result = $db->get_name_from_username($username);
             if (mysqli_num_rows($result) > 0) {
                 $row = mysqli_fetch_row($result);
-                $name = htmlentities($row['first_name']);                  
+                $name = htmlentities($row[0]);                  
                 $_SESSION['name'] = $name;
             }
             $_SESSION['username'] = $username;
@@ -40,7 +40,16 @@ if (count($_POST) > 0) {
                 </div>";
         }
         else {
-           header("Location : javascript://history.go(-1)");
+            // repeated -- make function
+            $result = $db->get_name_from_username($username);
+            if (mysqli_num_rows($result) > 0) {
+                $row = mysqli_fetch_row($result);
+                $name = htmlentities($row['first_name']);                  
+                $_SESSION['name'] = $name;
+            }
+            $_SESSION['username'] = $username;
+            mysqli_free_result($result);
+            header("Location: " . $location);
         }
     }
 }

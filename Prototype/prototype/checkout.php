@@ -7,14 +7,14 @@ include '../Includes/layout_header.php';
 $action = isset($_GET['action']) ? $_GET['action'] : "";
 $message = isset($_GET['message']) ? $_GET['message'] : "";
 
-if($action=='exception'){
-    echo "<div class='alert alert-danger alert-dismissible'>";
-        echo "<button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+if($action=='exception'){ ?>
+    <div class='alert alert-danger alert-dismissible'>
+        <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
             <span aria-hidden='true'>&times;</span>
-            </button>
-        <strong>{$message}</strong>
-    </div>";
-}
+        </button>
+        <strong><?php echo $message ?></strong>
+    </div>
+<?php }
 
 $db = StoreDB::getInstance();
 $cart = $_SESSION['cart_products'];
@@ -24,17 +24,17 @@ if(count($cart) > 0){
     $subtotal = 0;
     $price = 0;
     $quantity = 0;
-    $name = '';
-    echo "<p><h3>1. Review Cart Items</h3><p>
+    $name = ''; ?>
+    <p><h3>1. Review Cart Items</h3><p>
     <table class= 'table table-hover table-responsive table-bordered' id='cartTable'>
         <tr>
             <th class='textAlignLeft'>Product Name</th>
             <th>Price</th>
             <th>Quantity</th>
             <th>Total</th>
-        </tr>";
+        </tr>
     
-    foreach($cart as $PID => $value){
+    <?php foreach($cart as $PID => $value){
         
         $result = $db->get_cart_variables($PID);
         while($row = mysqli_fetch_array($result)) {
@@ -43,52 +43,52 @@ if(count($cart) > 0){
         }
         mysqli_free_result($result);
       
-        $total = $price * (int)$value;
+        $total = $price * (int)$value; ?>
       
-        echo "<tr>
-                <td>" . $name . "</td>
-                <td>" . $price . "</td>
-                <td>" . $value . "</td>
-                <td>" . $total . "</td>
-            </tr>";
+        <tr>
+            <td><?php echo $name; ?></td>
+            <td><?php echo $price; ?></td>
+            <td><?php echo $value; ?></td>
+            <td><?php echo $total; ?></td>
+        </tr>
         
-        $subtotal += $total;
+    <?php    $subtotal += $total;
     }
     
     $taxRate = .05475;
     $tax = $subtotal * $taxRate;
     $shipping = calculateShipping($subtotal);
-    $grandTotal = $subtotal + $tax + $shipping;
+    $grandTotal = $subtotal + $tax + $shipping; ?>
     
-    echo "<tr>
+        <tr>
             <td><strong>Subtotal</strong></td>
             <td></td>
             <td></td>
-            <td><strong>" . $subtotal . "</strong></td>
+            <td><strong><?php echo $subtotal; ?></strong></td>
         </tr>
         <tr>
             <td>Sales Tax</td>
             <td></td>
             <td></td>
-            <td>" . number_format($tax, 2) . "</td>
+            <td><?php echo number_format($tax, 2); ?></td>
         </tr>
         <tr>
             <td>Shipping</td>
             <td></td>
             <td></td>
-            <td>" . number_format($shipping, 2) . "</td>
+            <td><?php echo number_format($shipping, 2); ?></td>
         </tr>
         <tr>
             <td><strong>Total to be Charged</strong></td>
             <td></td>
             <td></td>
-            <td><strong>" . number_format($grandTotal, 2) . "</strong></td>
+            <td><strong><?php echo number_format($grandTotal, 2); ?></strong></td>
         </tr>
     </table>
     <a href='store.php' class='btn btn-default'>Continue Shopping</a>
-    <a href='cart.php' class='btn btn-default'>Edit Cart</a>";
+    <a href='cart.php' class='btn btn-default'>Edit Cart</a>
     
-    echo '<hr class="top-pad-50">
+    <hr class="top-pad-50">
     <p class="top-pad-50"><h3>2. Enter Customer Details</h3></p>
     <form class="form-horizontal bottom-pad-50" method="post" action="order_process.php">
       <div class="form-group">      
@@ -215,23 +215,23 @@ if(count($cart) > 0){
           </div>
       </div>
 
-      <input type="hidden" name="subtotal" value="' . $subtotal . '"/>
-      <input type="hidden" name="shipping" value="' . $shipping . '"/>
-      <input type="hidden" name="tax" value="' . $tax . '"/>
-      <input type="hidden" name="total" value="' . $grandTotal . '"/>
+      <input type="hidden" name="subtotal" value="<?php echo $subtotal; ?>"/>
+      <input type="hidden" name="shipping" value="<?php echo $shipping; ?>"/>
+      <input type="hidden" name="tax" value="<?php echo $tax ?>"/>
+      <input type="hidden" name="total" value="<?php echo $grandTotal; ?>"/>
 
 
       <input type="submit" class="btn btn-primary">
-    </form>';
-}
-else {
-    echo "<div class='alert alert-danger'>
+    </form>
+<?php }
+else { ?>
+    <div class='alert alert-danger'>
         <form action='store.php'>
         <button type='submit' class='close' aria-label='close'>&times;</button>
         Shopping cart is <strong>empty</strong>!
         </form>
-    </div>";    
-}
+    </div>    
+<?php }
 
 
 include '../Includes/layout_footer.php';

@@ -105,6 +105,26 @@ class StoreDB extends mysqli {
     public function get_name_from_username($username) {
         return $this->query("SELECT first_name FROM customers WHERE user_name='" . $username . "'");
     }
+    
+    public function get_customer_from_username($username) {
+        $result = $this->query("SELECT CID FROM customers WHERE user_name='" . $username . "'");
+        $count = mysqli_num_rows($result);
+        if ($count > 0) {
+            $row = mysqli_fetch_row($result);
+            mysqli_free_result($result);
+            return htmlentities($row[0]);
+        }
+        mysqli_free_result($result);
+        return false;
+    }
+    
+    public function get_orders_by_customer($CID) {
+        return $this->query("SELECT * FROM orders WHERE customer='" . $CID . "'");
+    }
+    
+    public function get_products_by_order($OID) {
+        return $this->query("SELECT * FROM order_products WHERE order_id='" . $OID . "'");
+    }
 }
 
 
