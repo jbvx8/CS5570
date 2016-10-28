@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 17, 2016 at 09:27 PM
+-- Generation Time: Oct 27, 2016 at 05:10 PM
 -- Server version: 5.7.9
 -- PHP Version: 7.0.0
 
@@ -104,9 +104,18 @@ CREATE TABLE IF NOT EXISTS `customers` (
   `zip` varchar(20) NOT NULL,
   `phone` varchar(30) NOT NULL,
   `email` varchar(255) NOT NULL,
-  `user_name` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`CID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `user_name` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`CID`),
+  KEY `user_name` (`user_name`)
+) ENGINE=InnoDB AUTO_INCREMENT=55 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `customers`
+--
+
+INSERT INTO `customers` (`CID`, `last_name`, `first_name`, `address_line1`, `address_line2`, `city`, `state`, `zip`, `phone`, `email`, `user_name`) VALUES
+(53, 'Batson', 'Jackie', '4200 Holly Street', NULL, 'Kansas City', 'MO', '64111', '8161234567', 'jbvx8@mail.umkc.edu', 'jackie'),
+(54, 'Hahn', 'Niko', '4200 Holly Street', NULL, 'Kansas City', 'MO', '64111', '8161234567', 'niko@catchat.com', 'niko');
 
 -- --------------------------------------------------------
 
@@ -123,10 +132,16 @@ CREATE TABLE IF NOT EXISTS `orders` (
   `shipping` decimal(6,2) NOT NULL,
   `tax` decimal(8,2) NOT NULL,
   `total` decimal(12,2) NOT NULL,
-  `status` enum('cart','ordered','shipped') NOT NULL,
   PRIMARY KEY (`OID`),
   KEY `customer` (`customer`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `orders`
+--
+
+INSERT INTO `orders` (`OID`, `customer`, `date`, `subtotal`, `shipping`, `tax`, `total`) VALUES
+(35, 53, '2016-10-27 20:46:15', '23.98', '3.99', '1.31', '29.28');
 
 -- --------------------------------------------------------
 
@@ -138,9 +153,17 @@ DROP TABLE IF EXISTS `order_products`;
 CREATE TABLE IF NOT EXISTS `order_products` (
   `order_id` int(11) NOT NULL,
   `product_id` int(11) NOT NULL,
+  `product_quantity` smallint(6) NOT NULL,
   PRIMARY KEY (`order_id`,`product_id`),
   KEY `order_prod_prod` (`product_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `order_products`
+--
+
+INSERT INTO `order_products` (`order_id`, `product_id`, `product_quantity`) VALUES
+(35, 1, 2);
 
 -- --------------------------------------------------------
 
@@ -196,6 +219,28 @@ INSERT INTO `types` (`type`) VALUES
 ('Movies'),
 ('Music');
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `users`
+--
+
+DROP TABLE IF EXISTS `users`;
+CREATE TABLE IF NOT EXISTS `users` (
+  `username` varchar(20) NOT NULL,
+  `password` varchar(100) NOT NULL,
+  PRIMARY KEY (`username`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`username`, `password`) VALUES
+('jackie', 'password'),
+('lucas', 'password'),
+('niko', 'password');
+
 --
 -- Constraints for dumped tables
 --
@@ -205,6 +250,12 @@ INSERT INTO `types` (`type`) VALUES
 --
 ALTER TABLE `attributes`
   ADD CONSTRAINT `product_attributes` FOREIGN KEY (`product_id`) REFERENCES `products` (`PID`);
+
+--
+-- Constraints for table `customers`
+--
+ALTER TABLE `customers`
+  ADD CONSTRAINT `customer_to_user` FOREIGN KEY (`user_name`) REFERENCES `users` (`username`);
 
 --
 -- Constraints for table `orders`
