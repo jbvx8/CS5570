@@ -13,17 +13,17 @@ if(count($cart) > 0){
     $subtotal = 0;
     $price = 0;
     $quantity = 0;
-    $name = '';
-    echo "<table class= 'table table-hover table-responsive table-bordered' id='cartTable'>
+    $name = ''; ?>
+    <table class= 'table table-hover table-responsive table-bordered' id='cartTable'>
         <tr>
             <th class='textAlignLeft'>Product Name</th>
             <th>Price</th>
             <th>Quantity</th>
             <th>Total</th>
             <th></th>
-        </tr>";
+        </tr>
     
-    foreach($cart as $PID => $value){
+    <?php foreach($cart as $PID => $value){
  
         $result = $db->get_cart_variables($PID);
         while($row = mysqli_fetch_array($result)) {
@@ -32,52 +32,52 @@ if(count($cart) > 0){
         }
     mysqli_free_result($result);
 
-    $total = $price * (int)$value;
+    $total = $price * (int)$value; ?>
       
-    echo "<tr>
-            <td>" . $name . "</td>
-            <td>" . $price . "</td>
-            <td>" . $value . "</td>
-            <td>" . $total . "</td>
+        <tr>
+            <td><?php echo $name; ?></td>
+            <td><?php echo $price; ?></td>
+            <td><?php echo $value; ?></td>
+            <td><?php echo $total; ?></td>
             <td><form name='removeForm'>
                 <input type='hidden' name='id' value='" . $PID . "'/>
-                <button class='btnRemove' type='submit' value='remove'>Remove</button></td>
+                <button class='btnRemove btn-danger' type='submit' value='remove'>Remove</button></td>
                 </form>
             </td>
-        </tr>";
+        </tr>
 
-    $subtotal += $total;
-    }  
+    <?php $subtotal += $total;
+    }  ?>
     
 
-    echo "<tr>
+        <tr>
             <td><strong>Subtotal</strong></td>
             <td></td>
             <td></td>
-            <td><strong>" . $subtotal . "</strong></td>
+            <td><strong><?php echo $subtotal; ?></strong></td>
         </tr>
-    </table>";
+    </table>
     
-    echo "<button id='checkoutButton' class='btn btn-default' 
-        onclick='this.style.display=&quot;none&quot;;showDiv(checkoutDiv.id)'>Checkout</button>
+    <?php if (isset($_SESSION['username'])) { ?>
+    <a href="checkout.php" class="btn btn-default">Checkout</a>
+    <?php } else { ?>
+    <button id='checkoutButton' class='btn btn-default' 
+        onclick='this.style.display="none";showDiv(checkoutDiv.id)'>Checkout</button>
        
         <div id='checkoutDiv' style='display:none;'>
             <a href='checkout.php' class='btn btn-default'>Checkout as Guest</a>
-            <a href='#' class='btn btn-default'>Login</a>
-        </div>";
-}
-else {
-    echo "<div class='alert alert-danger'>
+            <a href='login.php' class='btn btn-default'>Login</a>
+        </div>
+    <?php }
+ } else { ?>
+    <div class='alert alert-danger'>
         <form action='store.php'>
         <button type='submit' class='close' aria-label='close'>&times;</button>
         Shopping cart is <strong>empty</strong>!
-        </form>";
-    echo "</div>";    
-}
+        </form>
+    </div>    
+<?php } ?>
 
-
-
-?>
 <script src='../Scripts/cart.js' type="text/javascript"></script>
 <?php include '../Includes/layout_footer.php'; ?>
 

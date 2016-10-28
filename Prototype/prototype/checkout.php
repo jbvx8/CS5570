@@ -88,6 +88,39 @@ if(count($cart) > 0){
     <a href='store.php' class='btn btn-default'>Continue Shopping</a>
     <a href='cart.php' class='btn btn-default'>Edit Cart</a>
     
+<?php if (isset($_SESSION['name'])) {?>
+    <hr class="top-pad-50">
+    <p class="top-pad-50"><h3>2. Review Customer Details</h3></p>
+    
+    <?php 
+    $result = $db->get_customer_from_username($_SESSION['username']);
+    $row = mysqli_fetch_array($result); ?>
+    
+    <h4>
+<!--        Last Name: <?php echo $row['last_name']; ?><br>
+        First Name: <?php echo $row['first_name']; ?><br>
+        Address Line 1: <?php echo $row['address_line1']; ?><br>
+        Address Line 2: <?php echo $row['address_line2']; ?><br>
+        City, State Zip: <?php echo $row['city'] . ", " . $row['state'] . " " . $row['zip']; ?><br>
+        Phone Number: <?php echo $row['phone']; ?><br>
+        Email Address: <?php echo $row['email']; ?><br>-->
+        
+        <?php echo $row['first_name'] . " " . $row['last_name'] . "<br>"
+                   . $row['address_line1'] . "<br>";
+              if ($row['address_line2']) {
+                  echo $row['address_line2'] . "<br>";
+              }
+              echo $row['city'] . ", " . $row['state'] . " " . $row['zip'] . "<br>"
+                   . $row['phone'] . "<br>"
+                   . $row['email'];
+                
+                ?>
+       
+    </h4>
+    <a href="#">Edit Customer Details</a>
+    
+    <?php mysqli_free_result($result);
+} else { ?>
     <hr class="top-pad-50">
     <p class="top-pad-50"><h3>2. Enter Customer Details</h3></p>
     <form class="form-horizontal bottom-pad-50" method="post" action="order_process.php">
@@ -190,7 +223,7 @@ if(count($cart) > 0){
             <input type="tel" class="form-control" id="inputPhone" name="inputPhone" placeholder="1234567890">
           </div>
       </div>
-
+<?php } ?>
       <hr class="top-pad-50">
       <p class="top-pad-50"><h3>3. Enter Payment Information</h3></p>
       <div class="form-group">

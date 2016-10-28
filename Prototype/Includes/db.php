@@ -106,7 +106,7 @@ class StoreDB extends mysqli {
         return $this->query("SELECT first_name FROM customers WHERE user_name='" . $username . "'");
     }
     
-    public function get_customer_from_username($username) {
+    public function get_customerID_from_username($username) {
         $result = $this->query("SELECT CID FROM customers WHERE user_name='" . $username . "'");
         $count = mysqli_num_rows($result);
         if ($count > 0) {
@@ -116,6 +116,10 @@ class StoreDB extends mysqli {
         }
         mysqli_free_result($result);
         return false;
+    }
+    
+    public function get_customer_from_username($username) {
+        return $this->query("SELECT * FROM customers WHERE user_name='" . $username . "'");
     }
     
     public function get_orders_by_customer($CID) {

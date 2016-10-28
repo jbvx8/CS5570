@@ -54,7 +54,7 @@ try{
     if (!isset($_SESSION['username'])) {
         $custID = $db->insert_customer($last, $first, $address1, $address2, $city, $state, $zip, $phone, $email);
     } else {
-        $custID = $db->get_customer_from_username($_SESSION['username']);
+        $custID = $db->get_customerID_from_username($_SESSION['username']);
         if (!$custID) {
             $custID = $db->insert_customer($last, $first, $address1, $address2, $city, $state, $zip, $phone, $email);
         }

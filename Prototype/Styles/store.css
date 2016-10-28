@@ -31,4 +31,19 @@
 .bottom-pad-50 {
     margin-bottom: 50px;
 }
+.order-head {
+    background: #FFFC9A;
+    overflow: auto;
+}
+
+.order-head .title {
+    float:left;
+    padding-left: 5px;
+}
+
+.order-head .date {
+    float:right;
+    padding-right: 5px;
+}
+
 
