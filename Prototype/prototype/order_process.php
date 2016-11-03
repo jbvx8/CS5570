@@ -26,6 +26,8 @@ function randBool() {
     }   
 } 
 
+
+
 $first = isset($_POST['inputFirst']) ? $_POST['inputFirst'] : "";
 $last = isset($_POST['inputLast']) ? $_POST['inputLast'] : "";
 $address1 = isset($_POST['inputAddress1']) ? $_POST['inputAddress1'] : "";

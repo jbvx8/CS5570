@@ -6,6 +6,7 @@ if(!isset($_SESSION['cart_products'])) {
 if(isset($_GET['logout'])) {
     unset($_SESSION['username']);
     unset($_SESSION['password']);
+    if (isset($_SESSION['customer'])) { unset($_SESSION['customer']); }
     if (isset($_SESSION['name'])) { unset($_SESSION['name']); }
     $url = str_replace("?logout=true", "", $_SERVER["REQUEST_URI"]);
     header("Location: " . $url);

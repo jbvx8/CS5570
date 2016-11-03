@@ -78,6 +78,6 @@ if(count($cart) > 0){
     </div>    
 <?php } ?>
 
-<script src='../Scripts/cart.js' type="text/javascript"></script>
+<script src='../Scripts/store.js' type="text/javascript"></script>
 <?php include '../Includes/layout_footer.php'; ?>
 

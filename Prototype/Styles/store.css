@@ -46,4 +46,9 @@
     padding-right: 5px;
 }
 
+.disabled {
+    color: lightgray;
+    background-color: white;
+}
+
 

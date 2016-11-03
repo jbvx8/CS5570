@@ -4,8 +4,8 @@ session_start();
 $page_title="Checkout";
 include '../Includes/layout_header.php';
 
-$action = isset($_GET['action']) ? $_GET['action'] : "";
-$message = isset($_GET['message']) ? $_GET['message'] : "";
+$action = isset($_GET['action']) ? htmlspecialchars($_GET['action']) : "";
+$message = isset($_GET['message']) ? htmlspecialchars($_GET['message']) : "";
 
 if($action=='exception'){ ?>
     <div class='alert alert-danger alert-dismissible'>
@@ -24,7 +24,8 @@ if(count($cart) > 0){
     $subtotal = 0;
     $price = 0;
     $quantity = 0;
-    $name = ''; ?>
+    $name = ''; 
+    $customer = array();?>
     <p><h3>1. Review Cart Items</h3><p>
     <table class= 'table table-hover table-responsive table-bordered' id='cartTable'>
         <tr>
@@ -88,38 +89,32 @@ if(count($cart) > 0){
     <a href='store.php' class='btn btn-default'>Continue Shopping</a>
     <a href='cart.php' class='btn btn-default'>Edit Cart</a>
     
-<?php if (isset($_SESSION['name'])) {?>
+<?php if (isset($_SESSION['customer'])) {?>
     <hr class="top-pad-50">
     <p class="top-pad-50"><h3>2. Review Customer Details</h3></p>
-    
+    <form class="form-horizontal bottom-pad-50" method="post" action="order_process.php">
     <?php 
-    $result = $db->get_customer_from_username($_SESSION['username']);
-    $row = mysqli_fetch_array($result); ?>
-    
+    //$customer = $db->get_customer_from_username($_SESSION['username']);
+    //$row = mysqli_fetch_array($result); 
+    $customer = $_SESSION['customer']; ?>
     <h4>
-<!--        Last Name: <?php echo $row['last_name']; ?><br>
-        First Name: <?php echo $row['first_name']; ?><br>
-        Address Line 1: <?php echo $row['address_line1']; ?><br>
-        Address Line 2: <?php echo $row['address_line2']; ?><br>
-        City, State Zip: <?php echo $row['city'] . ", " . $row['state'] . " " . $row['zip']; ?><br>
-        Phone Number: <?php echo $row['phone']; ?><br>
-        Email Address: <?php echo $row['email']; ?><br>-->
+
         
-        <?php echo $row['first_name'] . " " . $row['last_name'] . "<br>"
-                   . $row['address_line1'] . "<br>";
-              if ($row['address_line2']) {
-                  echo $row['address_line2'] . "<br>";
+        <?php echo $customer['firstName'] . " " . $customer['lastName'] . "<br>"
+                   . $customer['addressLine1'] . "<br>";
+              if ($customer['addressLine2']) {
+                  echo $customer['addressLine2'] . "<br>";
               }
-              echo $row['city'] . ", " . $row['state'] . " " . $row['zip'] . "<br>"
-                   . $row['phone'] . "<br>"
-                   . $row['email'];
+              echo $customer['city'] . ", " . $customer['state'] . " " . $customer['zip'] . "<br>"
+                   . $customer['phone'] . "<br>"
+                   . $customer['email'];
                 
                 ?>
        
     </h4>
-    <a href="#">Edit Customer Details</a>
+    <a href="user_edit.php">Edit Customer Details</a>
     
-    <?php mysqli_free_result($result);
+    <?php 
 } else { ?>
     <hr class="top-pad-50">
     <p class="top-pad-50"><h3>2. Enter Customer Details</h3></p>
@@ -154,6 +149,7 @@ if(count($cart) > 0){
           <div class="col-md-2">
             <label for="inputState">State</label>	
             <select class="form-control" id="inputState" name="inputState">
+                <option selected disabled class="disabled" >Select State..</font></option>
                 <option value="AK">Alaska</option>
                 <option value="AL">Alabama</option>
                 <option value="AR">Arkansas</option>
@@ -225,37 +221,40 @@ if(count($cart) > 0){
       </div>
 <?php } ?>
       <hr class="top-pad-50">
-      <p class="top-pad-50"><h3>3. Enter Payment Information</h3></p>
-      <div class="form-group">
-          <div class="col-md-8">
-            <label for="inputCardName">Name on Card</label>
-            <input type="text" class="form-control" id="inputCardName" name="inputCardName" placeholder="Bob Dole">
+      <div class="bottom-pad-50 top-pad-50">
+          <h3>3. Enter Payment Information</h3>
+          <div class="form-group">
+              <div class="col-md-8">
+                <label for="inputCardName">Name on Card</label>
+                <input type="text" class="form-control" id="inputCardName" name="inputCardName" placeholder="Bob Dole">
+              </div>
           </div>
-      </div>
 
-      <div class="form-group">      
-          <div class="col-md-4">
-            <label for="inputCC">Credit Card Number</label>
-            <input type="text" class="form-control" id="inputCC" name="inputCC" pattern="[0-9]{16}" required title="Not a valid credit card number">
+          <div class="form-group">      
+              <div class="col-md-4">
+                <label for="inputCC">Credit Card Number</label>
+                <input type="text" class="form-control" id="inputCC" name="inputCC" pattern="[0-9]{16}" required title="Not a valid credit card number">
+              </div>
+              <div class="col-md-2">
+                <label for="inputCCExp">Expiration Date</label>
+                <input type="text" class="form-control" id="inputCCExp" name="inputCCExp" placeholder="MMYY" pattern="[0-9]{4}" required title="Format must be MMYY">
+              </div>
+              <div class="col-md-2">
+                <label for="inputCVV">Security Code</label>
+                <input type="text" class="form-control" id="inputCVV" name="inputCVV" pattern="[0-9]{3}" required title="Not a valid CVV">
+              </div>
           </div>
-          <div class="col-md-2">
-            <label for="inputCCExp">Expiration Date</label>
-            <input type="text" class="form-control" id="inputCCExp" name="inputCCExp" placeholder="MMYY" pattern="[0-9]{4}" required title="Format must be MMYY">
-          </div>
-          <div class="col-md-2">
-            <label for="inputCVV">CVV</label>
-            <input type="text" class="form-control" id="inputCVV" name="inputCVV" pattern="[0-9]{3}" required title="Not a valid CVV">
-          </div>
-      </div>
 
-      <input type="hidden" name="subtotal" value="<?php echo $subtotal; ?>"/>
-      <input type="hidden" name="shipping" value="<?php echo $shipping; ?>"/>
-      <input type="hidden" name="tax" value="<?php echo $tax ?>"/>
-      <input type="hidden" name="total" value="<?php echo $grandTotal; ?>"/>
-
-
-      <input type="submit" class="btn btn-primary">
-    </form>
+          <input type="hidden" name="subtotal" value="<?php echo $subtotal; ?>"/>
+          <input type="hidden" name="shipping" value="<?php echo $shipping; ?>"/>
+          <input type="hidden" name="tax" value="<?php echo $tax ?>"/>
+          <input type="hidden" name="total" value="<?php echo $grandTotal; ?>"/>
+   
+          
+            <input type="submit" class="btn btn-primary">
+          
+        </form>
+    </div>
 <?php }
 else { ?>
     <div class='alert alert-danger'>
@@ -286,4 +285,3 @@ function calculateShipping($total) {
 }
 
 
-?>

@@ -9,7 +9,7 @@ class StoreDB extends mysqli {
     private $pass = "phpuserjb";
     private $dbName = "ecommerce";
     private $dbHost = "localhost";
-    private $con = null;
+  
     
     // static method that must return an instance of the object if the object does
     // not already exist.
@@ -118,8 +118,30 @@ class StoreDB extends mysqli {
         return false;
     }
     
+//    public function get_customer_from_username($username) {
+//        return $this->query("SELECT * FROM customers WHERE user_name='" . $username . "'");
+//    }
+    
     public function get_customer_from_username($username) {
-        return $this->query("SELECT * FROM customers WHERE user_name='" . $username . "'");
+        $customer = array();
+        $result = $this->query("SELECT * FROM customers WHERE user_name='" . $username . "'");
+        if (mysqli_num_rows($result) == 0) {
+            mysqli_free_result($result);
+            return false;
+        }
+        while ($row = mysqli_fetch_array($result)) {
+            $customer['firstName'] = htmlspecialchars($row['first_name']);
+            $customer['lastName'] = htmlspecialchars($row['last_name']);
+            $customer['addressLine1'] = htmlspecialchars($row['address_line1']);
+            $customer['addressLine2'] = htmlspecialchars($row['address_line2']);
+            $customer['city'] = htmlspecialchars($row['city']);
+            $customer['state'] = htmlspecialchars($row['state']);
+            $customer['zip'] = htmlspecialchars($row['zip']);
+            $customer['phone'] = htmlspecialchars($row['phone']);
+            $customer['email'] = htmlspecialchars($row['email']);
+        }
+        mysqli_free_result($result);
+        return $customer;       
     }
     
     public function get_orders_by_customer($CID) {
@@ -128,6 +150,19 @@ class StoreDB extends mysqli {
     
     public function get_products_by_order($OID) {
         return $this->query("SELECT * FROM order_products WHERE order_id='" . $OID . "'");
+    }
+    
+    public function get_user_from_username($username) {
+        $result = $this->query("SELECT * FROM users WHERE username='" . $username . "'");
+        if (mysqli_num_rows($result) > 0) {
+            $row = mysqli_fetch_array($result);
+            foreach ($row as $key => $value) {
+                $user[$key] = $value;
+            }
+            return $user;           
+        }
+        mysqli_free_result($result);
+        return false;
     }
 }
 

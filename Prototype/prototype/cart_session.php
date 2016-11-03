@@ -4,9 +4,9 @@ session_start();
 
 // get product info
 error_log("cart session");
-$PID = isset($_GET['id']) ? $_GET['id'] : "";
-$name = isset($_GET['name']) ? $_GET['name'] : "";
-$quantity = isset($_GET['quantity']) ? $_GET['quantity'] : "1";
+$PID = isset($_GET['id']) ? htmlspecialchars($_GET['id']) : "";
+$name = isset($_GET['name']) ? htmlspecialchars($_GET['name']) : "";
+$quantity = isset($_GET['quantity']) ? htmlspecialchars($_GET['quantity']) : "1";
 
  //check first if the cart array has been created, if not, create one
 if(!isset($_SESSION['cart_products'])) {

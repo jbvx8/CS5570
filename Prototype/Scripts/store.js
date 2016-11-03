@@ -2,6 +2,11 @@ function showDiv(id){
     document.getElementById(id).style.display="block";
 }
 
+var confirm = document.getElementbyId('editForm');
+confirm.addEventListener('submit', function() {
+    return confirm("Are you sure you want to make these changes to the database?");
+}, false);
+
 
 
 $(document).ready(function(){

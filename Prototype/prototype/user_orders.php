@@ -70,4 +70,3 @@ while ($row = mysqli_fetch_array($result)) {
 mysqli_free_result($result); 
 
 include "../Includes/layout_footer.php";
-?>

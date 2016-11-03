@@ -6,11 +6,20 @@ $db = StoreDB::getInstance();
 $location = isset($_GET['location']) ?  htmlspecialchars($_GET['location']) : "#";
 
 if (count($_POST) > 0) {
-    $username = isset($_POST['userName']) ? $_POST['userName'] : "";
-    $password = isset($_POST['password']) ? $_POST['password'] : "";
-    if ($_POST['id'] == "login") {
+    $username = isset($_POST['userName']) ? htmlspecialchars($_POST['userName']) : "";
+    $password = isset($_POST['password']) ? htmlspecialchars($_POST['password']) : "";
+    if (htmlspecialchars($_POST['id']) == "login") {
         if($db->verify_user($username, $password)) {
+            
+            $user = $db->get_user_from_username($username);
+            $pswd = $user['password'];
+            
+            
             $result = $db->get_name_from_username($username);
+            $customer = $db->get_customer_from_username($username);
+            if ($customer) {
+                $_SESSION['customer'] = $customer; 
+            }
             if (mysqli_num_rows($result) > 0) {
                 $row = mysqli_fetch_row($result);
                 $name = htmlentities($row[0]);                  
@@ -21,25 +30,24 @@ if (count($_POST) > 0) {
             header("Location: " . $location);
             exit;
             
-        } else {
-            echo "<div class='alert alert-danger alert-dismissible'>
-                    <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
-                    <span aria-hidden='true'>&times;</span>
-                    </button>
-                    Invalid username or password.  Try again.
-                </div>";
-        }      
+        } else { ?>
+            <div class='alert alert-danger alert-dismissible'>
+                <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+                <span aria-hidden='true'>&times;</span>
+                </button>
+                Invalid username or password.  Try again.
+            </div>
+<?php        }      
     }
-    else if ($_POST['id'] == "register") {
-        if(!$db->insert_user($username, $password)) {
-            echo "<div class='alert alert-danger alert-dismissible'>
-                    <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
-                    <span aria-hidden='true'>&times;</span>
-                    </button>
-                    That username is already selected. Try again.
-                </div>";
-        }
-        else {
+    else if (htmlspecialchars($_POST['id']) == "register") {
+        if(!$db->insert_user($username, $password)) { ?>
+            <div class='alert alert-danger alert-dismissible'>
+                <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+                <span aria-hidden='true'>&times;</span>
+                </button>
+                That username is already selected. Try again.
+            </div>
+<?php   } else {
             // repeated -- make function
             $result = $db->get_name_from_username($username);
             if (mysqli_num_rows($result) > 0) {
@@ -71,7 +79,7 @@ if (count($_POST) > 0) {
                         <input type="text" class="form-control" name="userName" required placeholder="Enter user name here">
                       </div>
                       <div class="form-group">
-                        <label for="password">Password (must be at least 5 characters)</label>
+                        <label for="password">Password (must be at least 6 characters)</label>
                         <input type="password" class="form-control" required name="password" placeholder="Password">
                       </div>
                       <button type="submit" name="id" value="login" class="btn btn-default">Login</button>
@@ -79,8 +87,5 @@ if (count($_POST) > 0) {
                     </form>
                 </p>
         </div>
-        <?php
-        // put your code here
-        ?>
     </body>
 </html>
