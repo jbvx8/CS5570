@@ -92,7 +92,7 @@ if(count($cart) > 0){
 <?php if (isset($_SESSION['customer'])) {?>
     <hr class="top-pad-50">
     <p class="top-pad-50"><h3>2. Review Customer Details</h3></p>
-    <form class="form-horizontal bottom-pad-50" method="post" action="order_process.php">
+    <form class="form-horizontal bottom-pad-50" method="post" action="order_process.php?action=processOrder">
     <?php 
     //$customer = $db->get_customer_from_username($_SESSION['username']);
     //$row = mysqli_fetch_array($result); 

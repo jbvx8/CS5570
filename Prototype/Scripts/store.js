@@ -1,11 +1,18 @@
 function showDiv(id){
     document.getElementById(id).style.display="block";
 }
+function hideDiv(id){
+    document.getElementById(id).style.display="none";
+}
 
-var confirm = document.getElementbyId('editForm');
-confirm.addEventListener('submit', function() {
-    return confirm("Are you sure you want to make these changes to the database?");
-}, false);
+function disable(id){
+    document.getElementById(id).disabled = true;
+}
+
+//var confirm = document.getElementbyId('editForm');
+//confirm.addEventListener('submit', function() {
+//    return confirm("Are you sure you want to make these changes to the database?");
+//}, false);
 
 
 
@@ -20,6 +27,17 @@ $(document).ready(function(){
         console.log(data);
         $.post(url, data, function(response) {
             //alert("item removed from cart");
+        });
+    });
+});
+
+$(document).ready(function() {
+    $('.buttonEdit').click(function() {
+        var clickBtnValue = $(this).val();
+        var url= '../prototype/user_edit.php';
+        data = {'action': clickBtnValue};
+        $.post(url, data, function(response) {
+            
         });
     });
 });

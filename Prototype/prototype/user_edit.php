@@ -3,10 +3,49 @@ session_start();
 
 $page_title="Edit Customer Details";
 include '../Includes/layout_header.php';
+$db = StoreDB::getInstance();
 
-$customer = $_SESSION["customer"]; ?>
+$customer = $_SESSION["customer"]; 
 
-<form class="form-horizontal bottom-pad-50" method="post" action="order_process.php" id="editForm">
+$action = isset($_GET['action']) ? htmlspecialchars($_GET['action']) : "";
+$message = isset($_GET['message']) ? htmlspecialchars($_GET['message']) : "";
+
+switch($action){ 
+    case 'exception': ?>
+        <div class='alert alert-danger alert-dismissible'>
+            <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+                <span aria-hidden='true'>&times;</span>
+            </button>
+            <strong><?php echo $message ?></strong>
+        </div>
+<?php break;
+    case 'success': ?>
+        
+        <div class='alert alert-info alert-dismissible'>
+            <button type='button' class='close' data-dismiss='alert' aria-label='Close' onclick="history.go(-2);return false;">
+                OK
+             </button>
+            Customer successfully updated!
+        </div>
+<?php break;
+    case 'changePassword':
+        $new = isset($_POST['newPassword']) ? $_POST['newPassword'] : "";
+        $confirm = isset($_POST['confirmPassword']) ? $_POST['confirmPassword'] : "1";
+        if ($new == $confirm) {
+            try {
+                $username = $_SESSION['username'];
+                $db->change_password($username, $new);
+                header("Location: ?action=success");
+            } catch (Exception $ex) {
+                header("Location: ?action=exception&message=" . $ex->getMessage());
+            }           
+        } else {
+            header("Location: ?action=exception&message=Both values must match.");
+        }
+    }
+?>
+
+<form class="form-horizontal bottom-pad-50" method="post" action="order_process.php?action=update" id="editForm">
     <div class="form-group">      
       <div class="col-md-4">
         <label for="inputFirst">First Name</label>
@@ -107,4 +146,48 @@ $customer = $_SESSION["customer"]; ?>
         <input type="tel" class="form-control" id="inputPhone" name="inputPhone" value="<?php echo $customer['phone'];?>">
       </div>
     </div>
+    <input type="submit" class="btn btn-primary">
+    <button class="btn btn-default" onclick="history.go(-1);return false;">Cancel</button>
 </form>
+
+<h1 class="top-pad-50">Change Password</h1>
+<hr>
+<form class="form-horizontal top-pad-50 bottom-pad-50" method="post" action="order_process.php?action=verifyPassword">
+    <div class="form-group" id="oldPassword">  
+        <label for="oldPassword">Current Password</label>
+        <div class="col-md-4" id="currentP">        
+            <input type="password" class="form-control" id="oldPassword" name="oldPassword">
+        </div>
+    </div>
+</form>
+    <?php 
+    if ($action == 'userVerified') { 
+         ?>
+      <script > 
+          hideDiv("oldPassword");         
+      </script>
+      <form class="form-horizontal top-pad-50 bottom-pad-50" method="post" action="?action=changePassword">
+          <div class="form-group">
+            <label for="newPassword">New Password</label>
+            <div class="col-md-4">                
+                <input type="password" class="form-control" id="newPassword" name="newPassword" placeholder="Enter new password.">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="confirmPassword">Confirm New Password</label>
+            <div class="col-md-4">        
+                <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="Retype new password.">
+            </div>      
+          </div>
+          <button type="submit" class="btn btn-primary">Confirm change</button>
+      </form>
+    <?php } ?>
+   
+      
+      
+
+
+
+
+
+

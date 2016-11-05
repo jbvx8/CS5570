@@ -65,7 +65,7 @@ if(isset($_GET['logout'])) {
                   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">My Account <span class="caret"></span></a>
                   <ul class="dropdown-menu">
                       <li><a href="../prototype/user_orders.php">Orders</a></li>
-                    <li><a href="#">Settings</a></li>
+                    <li><a href="user_edit.php">Settings</a></li>
                     <li role="separator" class="divider"></li>
                     <li><a href="?logout=true">Logout</a></li>
                   </ul>

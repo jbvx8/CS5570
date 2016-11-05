@@ -48,29 +48,54 @@ $shipping = isset($_POST['shipping']) ? $_POST['shipping'] : 0;
 $tax = isset($_POST['tax']) ? $_POST['tax'] : 0;
 $total = isset($_POST['total']) ? $_POST['total'] : 0;
 
+
 $db = StoreDB::getInstance();
 //$verify = new Verification();
 
-try{
-    $db->begin_transaction();
-    if (!isset($_SESSION['username'])) {
-        $custID = $db->insert_customer($last, $first, $address1, $address2, $city, $state, $zip, $phone, $email);
-    } else {
-        $custID = $db->get_customerID_from_username($_SESSION['username']);
-        if (!$custID) {
-            $custID = $db->insert_customer($last, $first, $address1, $address2, $city, $state, $zip, $phone, $email);
-        }
+if (isset($_GET['action']) && $_GET['action'] == 'update') {
+    try {
+        $customer = ($_SESSION['customer']);
+        $CID = $customer['CID'];
+        $db->update_customer($CID, $first, $last, $address1, $address2, $city, $state, $zip, $phone, $email);
+        $customer = $db->get_customer_from_username($_SESSION['username']);
+        $_SESSION['customer'] = $customer;
+        header("Location:user_edit.php?action=success");
+    } catch (Exception $e) {
+        header("Location: user_edit.php?action=exception&message=" . $e->getMessage());
     }
-    $orderID = $db->insert_order($custID, $subtotal, $shipping, $tax, $total);
-    $db->insert_order_products($orderID, $_SESSION['cart_products']);
-    verify_payment();
-    unset($_SESSION['cart_products']);
-    $db->commit();
-    header("Location: order_confirmation.php?order_id=" . $orderID);
-} catch (Exception $ex) {
-    $db->rollback();
-    header("Location: checkout.php?action=exception&message=" . $ex->getMessage());
-}
+} else if (isset($_GET['action']) && $_GET['action'] == 'verifyPassword') {
+    $password = isset($_POST['oldPassword']) ? htmlspecialchars($_POST['oldPassword']) : "";
+    $username = $_SESSION['username'];
+    if (!$db->verify_user($username, $password)) {
+        header("Location: user_edit.php?action=exception&message=Incorrect Password. Try again.");
+    } else {
+        header("Location:user_edit.php?action=userVerified");
+    }
+    
+}else if (isset($_GET['action']) && $_GET['action'] == 'processOrder') {
+    try{
+        $db->begin_transaction();
+        if (!isset($_SESSION['username'])) {
+            $custID = $db->insert_customer($last, $first, $address1, $address2, $city, $state, $zip, $phone, $email);
+        } else {
+            $custID = $db->get_customerID_from_username($_SESSION['username']);
+            if (!$custID) {
+                $custID = $db->insert_customer($last, $first, $address1, $address2, $city, $state, $zip, $phone, $email);
+            }
+        }
+        $orderID = $db->insert_order($custID, $subtotal, $shipping, $tax, $total);
+        $db->insert_order_products($orderID, $_SESSION['cart_products']);
+        verify_payment();
+        unset($_SESSION['cart_products']);
+        $db->commit();
+        header("Location: order_confirmation.php?order_id=" . $orderID);
+    } catch (Exception $ex) {
+        $db->rollback();
+        header("Location: checkout.php?action=exception&message=" . $ex->getMessage());
+    }
+} ?>
+
+
 
 
 

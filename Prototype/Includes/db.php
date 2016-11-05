@@ -130,6 +130,7 @@ class StoreDB extends mysqli {
             return false;
         }
         while ($row = mysqli_fetch_array($result)) {
+            $customer['CID'] = htmlspecialchars($row['CID']); 
             $customer['firstName'] = htmlspecialchars($row['first_name']);
             $customer['lastName'] = htmlspecialchars($row['last_name']);
             $customer['addressLine1'] = htmlspecialchars($row['address_line1']);
@@ -163,6 +164,23 @@ class StoreDB extends mysqli {
         }
         mysqli_free_result($result);
         return false;
+    }
+    
+    public function update_customer($CID, $first, $last, $address1, $address2, $city, $state, $zip, $phone, $email) {
+        $result = $this->query("UPDATE customers SET last_name='" . $last . "', first_name='" . $first . "', address_line1='"
+                . $address1 . "', address_line2='" . $address2 . "', city='" . $city . "', state='" . $state . "', zip='" 
+                . $zip . "', phone='" . $phone . "', email='" . $email . "' WHERE CID='" . $CID . "'");
+                if(!$result) {
+                    mysqli_free_result($result);
+                    throw new Exception("Could not update customer. Try again.");
+                }
+    }
+    
+    public function change_password($username, $password) {
+        $result = $this->query("UPDATE users SET password='" . $password . "' WHERE username='" . $username . "'");
+        if(!$result) {
+            throw new Exception("Could not change password. Try again.");
+        }
     }
 }
 
