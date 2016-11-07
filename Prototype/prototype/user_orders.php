@@ -47,6 +47,8 @@ while ($row = mysqli_fetch_array($result)) {
         <?php while ($productRow = mysqli_fetch_array($orderProducts)) {
             $PID = $productRow['product_id'];
             $quantity = $productRow['product_quantity'];
+            $status = $productRow['status'];
+            $returnQuantity = $productRow['quantity_returned'];
             $productVariables = $db->get_cart_variables($PID);
             while ($variableRow = mysqli_fetch_array($productVariables)) {
                 $prodName = $variableRow['name'];
@@ -54,7 +56,15 @@ while ($row = mysqli_fetch_array($result)) {
             <tr>
                 <td><?php echo $prodName; ?></td>
                 <td><?php echo $price; ?></td>
-                <td><?php echo $quantity; ?></td>
+                <td><?php echo $quantity;
+                    echo "<span class='emphasis-red'>";
+                    if ($status == 'return_pending') {
+                        echo " " . $returnQuantity . " return pending.</em>";
+                    } else if ($status == 'returned') {
+                        echo " " . $returnQuantity . " returned.</em>";
+                    } 
+                    echo "</span>"?>
+                </td>
                 <td><?php echo $quantity * $price; ?></td>
             </tr>      
             <?php }

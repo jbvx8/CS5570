@@ -9,6 +9,21 @@
         <link rel="stylesheet" href="../Styles/store.css">
     </head>
     <body class="left-pad-25">
+        <?php
+        $quantities = $_POST["returnQuantity"];
+        $totalQuantity = 0;
+        foreach ($quantities as $quantity) {
+            $totalQuantity += $quantity;
+        }
+        if ($totalQuantity == 0) { ?>
+            <div class='alert alert-danger alert-dismissible'>
+                <button type='button' class='close' data-dismiss='alert' aria-label='Close' onclick="history.go(-1);return false;">
+                    <span aria-hidden='true'>OK</span>
+                </button>
+                <strong>No items selected!</strong>
+            </div>
+        <?php } else { ?>
+        
         <h4>Print this page and enclose it with your return items.  Mail to: <br><br>
             Web Store Returns Processing <br>
             1234 Returns Street <br>
@@ -28,6 +43,8 @@
                 <th>Reason</th>
             </tr>
             <?php
+            include "../Includes/db.php";
+            $db = StoreDB::getInstance();
             for ($i = 0; $i < count($_POST["returnPID"]); $i++) {
                 if ($_POST["returnQuantity"][$i] > 0) {
                     echo "<tr><td>" . $_POST["returnPID"][$i] . "</td>"
@@ -36,12 +53,13 @@
                         . "<td>" . $_POST["returnQuantity"][$i] . "</td>"
                         . "<td>" . $_POST["returnPrice"][$i] *  $_POST["returnQuantity"][$i] . "</td>"
                         . "<td>" . $_POST["returnReason"][$i] . "</td></tr>";
+                    $db->update_pending_returns($_POST["returnOID"], $_POST["returnPID"][$i], $_POST["returnQuantity"][$i]);
                 }
             } ?>
         </table>
         <h3>Credit Card to return credit to:</h3>
         <h4><strong>This must be filled out accurately to receive credit.</strong></h4>
-        <h4>If there are issues, we will contact you promptly at <?php echo $_POST["email"]; ?>.</h4>
+        <h4>If there are issues, we will contact you promptly at <strong><?php echo $_POST["email"]; ?></strong>.</h4>
         If this is not your correct email, please write your new email on this form or update your email in your account settings.
         <?php 
             $number = isset($_POST["inputCC"]) ? ($_POST["inputCC"]) : "";
@@ -55,9 +73,7 @@
             echo "CVV : " . $cvv . "<br>";
         
         ?>
-        
-        <div>
-            
-        </div>
+        <a href="user_orders.php" class="btn btn-default">Back</a>   
+        <?php } ?>
     </body>
 </html>

@@ -16,7 +16,7 @@ if (isset($_SESSION["customer"])) {
 }
 $orderProducts = $db->get_products_by_order($OID); ?>
 
-<form method="post" action="return_print.php">
+<form class="form-horizontal bottom-pad-50" method="post" action="return_print.php">
 <table class='table table-hover table-responsive table-striped'>
     <tr>
         <th class='textAlignLeft'>Product Name</th>
@@ -29,6 +29,8 @@ $orderProducts = $db->get_products_by_order($OID); ?>
     <?php while ($productRow = mysqli_fetch_array($orderProducts)) {
         $PID = $productRow['product_id'];
         $quantity = $productRow['product_quantity'];
+        $status = $productRow['status'];
+        $returnQuantity = $productRow['quantity_returned'];
         $productVariables = $db->get_cart_variables($PID);
         while ($variableRow = mysqli_fetch_array($productVariables)) {
             $prodName = $variableRow['name'];
@@ -38,18 +40,33 @@ $orderProducts = $db->get_products_by_order($OID); ?>
             <td><?php echo $price; ?></td>
             <td><?php echo $quantity; ?></td>
             <td><?php echo $quantity * $price; ?></td>
-            <td><select class="form-control auto-input" name="returnQuantity[]">
-                    <option selected value="0">0</option>
-                    <?php for($i = 1; $i <= $quantity; $i++) { ?>
-                    <option value="<?php echo $i; ?>"><?php echo $i; ?></option>
-                <?php } ?>
-                </select></td>
+            <td>
+                <?php
+                if ($status == 'returned' && $returnQuantity == $quantity) {
+                    echo "<em>Returned</em>";  
+                } else {
+                    echo "<span class='emphasis-red'>";
+                    if ($status == 'returned') {
+                        echo "<em>" . $returnQuantity . " returned.</em>";
+                    } else if ($status == 'return_pending') {
+                        echo "<em>" . $returnQuantity . " pending.</em>";
+                    }
+                    echo "</span>"
+                    ?>
+                    <select class="form-control auto-input" name="returnQuantity[]">
+                        <option selected value="0">0</option>
+                        <?php for($i = 1; $i <= $quantity; $i++) { ?>
+                        <option value="<?php echo $i; ?>"><?php echo $i; ?></option> 
+                        <?php } ?>
+                    </select>  
+                <?php } ?>      
+            </td>
             <td><input type="text" class="form-control" name="returnReason[]" placeholder="Enter a reason so we can better serve you."</td>               
         </tr> 
         <input type="hidden" name="returnPID[]" value="<?php echo $PID; ?>">
         <input type="hidden" name="returnName[]" value="<?php echo $prodName; ?>">
         <input type="hidden" name="returnPrice[]" value="<?php echo $price; ?>">
-        <input type="hidden" name="returnQuantity[]" value="<?php echo $quantity; ?>">
+        
         <?php }
         mysqli_free_result($productVariables);
     }
@@ -85,6 +102,7 @@ $orderProducts = $db->get_products_by_order($OID); ?>
           </div>
     <input type="hidden" name="email" value="<?php echo $customer['email']; ?>">
     <button type="submit" class="btn btn-primary">Submit Return</button>
+    <a href="user_orders.php" class="btn btn-default">Cancel</a>
 </form>
 
 

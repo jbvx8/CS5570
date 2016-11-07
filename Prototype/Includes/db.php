@@ -201,6 +201,14 @@ class StoreDB extends mysqli {
                 }
     }
     
+    public function update_pending_returns($OID, $PID, $quantity) {
+        $query = "UPDATE order_products SET status='return_pending', quantity_returned='"
+                . $quantity . "WHERE order_id='" . $OID . "' AND product_id='" . $PID . "'";
+        $result = $this->query("UPDATE order_products SET status='return_pending', quantity_returned='"
+                . $quantity . "' WHERE order_id='" . $OID . "' AND product_id='" . $PID . "'");
+        return $result;
+    }
+    
     public function change_password($username, $password) {
         $result = $this->query("UPDATE users SET password='" . $password . "' WHERE username='" . $username . "'");
         if(!$result) {
