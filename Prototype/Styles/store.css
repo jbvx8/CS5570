@@ -51,4 +51,22 @@
     background-color: white;
 }
 
+.auto-input {
+    width: auto;
+}
+
+.table-width-custom {
+    width: auto;
+}
+
+.left-pad-25 {
+    padding-left: 25px;
+}
+
+.emphasis-red {
+    color : red;
+    font-style: italic;
+}
+
+
 

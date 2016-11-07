@@ -5,7 +5,11 @@ $page_title="Edit Customer Details";
 include '../Includes/layout_header.php';
 $db = StoreDB::getInstance();
 
-$customer = $_SESSION["customer"]; 
+if (isset($_SESSION['customer'])) {
+    $customer = $_SESSION['customer'];
+} else {
+    header("Location: store.php");
+}
 
 $action = isset($_GET['action']) ? htmlspecialchars($_GET['action']) : "";
 $message = isset($_GET['message']) ? htmlspecialchars($_GET['message']) : "";

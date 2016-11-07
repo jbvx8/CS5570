@@ -54,6 +54,8 @@ if($action=='exists'){ ?>
                     echo "<p>Price: " . htmlentities($row["price"]) . "</p>";
                     mysqli_free_result($attributes); ?>
                     
+                    
+                    
                     <form action='cart_session.php'>
                         <input type='text' name='quantity' placeholder='0' size='2' />
                         <input type='hidden' name='id' value='<?php echo $PID ?>'/>

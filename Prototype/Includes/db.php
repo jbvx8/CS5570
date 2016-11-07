@@ -145,6 +145,31 @@ class StoreDB extends mysqli {
         return $customer;       
     }
     
+    public function get_customer_from_order($OID) {
+        $customer = array();
+        $result = $this->query("SELECT CID, first_name, last_name, address_line1, address_line2, city, state, zip, phone, email "
+                . "FROM customers c INNER JOIN orders o "
+                . "ON c.CID = o.customer WHERE o.OID ='" . $OID . "'");
+         if (mysqli_num_rows($result) == 0) {
+            mysqli_free_result($result);
+            return false;
+        }
+        while ($row = mysqli_fetch_array($result)) {
+            $customer['CID'] = htmlspecialchars($row['CID']); 
+            $customer['firstName'] = htmlspecialchars($row['first_name']);
+            $customer['lastName'] = htmlspecialchars($row['last_name']);
+            $customer['addressLine1'] = htmlspecialchars($row['address_line1']);
+            $customer['addressLine2'] = htmlspecialchars($row['address_line2']);
+            $customer['city'] = htmlspecialchars($row['city']);
+            $customer['state'] = htmlspecialchars($row['state']);
+            $customer['zip'] = htmlspecialchars($row['zip']);
+            $customer['phone'] = htmlspecialchars($row['phone']);
+            $customer['email'] = htmlspecialchars($row['email']);
+        }
+        mysqli_free_result($result);
+        return $customer;       
+    }
+    
     public function get_orders_by_customer($CID) {
         return $this->query("SELECT * FROM orders WHERE customer='" . $CID . "'");
     }
@@ -174,6 +199,14 @@ class StoreDB extends mysqli {
                     mysqli_free_result($result);
                     throw new Exception("Could not update customer. Try again.");
                 }
+    }
+    
+    public function update_pending_returns($OID, $PID, $quantity) {
+        $query = "UPDATE order_products SET status='return_pending', quantity_returned='"
+                . $quantity . "WHERE order_id='" . $OID . "' AND product_id='" . $PID . "'";
+        $result = $this->query("UPDATE order_products SET status='return_pending', quantity_returned='"
+                . $quantity . "' WHERE order_id='" . $OID . "' AND product_id='" . $PID . "'");
+        return $result;
     }
     
     public function change_password($username, $password) {
