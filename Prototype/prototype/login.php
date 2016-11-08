@@ -9,10 +9,12 @@ if (count($_POST) > 0) {
     $username = isset($_POST['userName']) ? htmlspecialchars($_POST['userName']) : "";
     $password = isset($_POST['password']) ? htmlspecialchars($_POST['password']) : "";
     if (htmlspecialchars($_POST['id']) == "login") {
-        if($db->verify_user($username, $password)) {
+        $user = $db->get_user_from_username($username);
+            //$pswd = $user['password'];
+            $hash_pwd = $user['password'];
+            $hash = password_verify($password, $hash_pwd);
+        if($db->verify_user($username, $hash_pwd)) {
             
-            $user = $db->get_user_from_username($username);
-            $pswd = $user['password'];
             
             
             $result = $db->get_name_from_username($username);
@@ -40,7 +42,8 @@ if (count($_POST) > 0) {
 <?php        }      
     }
     else if (htmlspecialchars($_POST['id']) == "register") {
-        if(!$db->insert_user($username, $password)) { ?>
+        $encrypted_password = password_hash($password, PASSWORD_DEFAULT);
+        if(!$db->insert_user($username, $encrypted_password)) { ?>
             <div class='alert alert-danger alert-dismissible'>
                 <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
                 <span aria-hidden='true'>&times;</span>
