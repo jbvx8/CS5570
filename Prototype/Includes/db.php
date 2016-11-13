@@ -61,10 +61,12 @@ class StoreDB extends mysqli {
     }
     
     public function insert_customer($last, $first, $address1, $address2, $city, $state, $zip, $phone, $email) {
-        if ($this->query("INSERT INTO customers (last_name, first_name, address_line1, address_line2, city, state, zip, phone, email)
-          VALUES('" . $last . "', '" . $first . "', '" . $address1 . "', '" . $address2 . "', '" 
-                . $city . "', '" . $state . "', '" . $zip . "', '" . $phone . "', '" . $email . "')")) {
-            return mysqli_insert_id($this);
+         if ($stmt=$this->prepare("INSERT INTO customers (last_name, first_name, address_line1, address_line2, city, state, zip, phone, email) VALUES (?,?,?,?,?,?,?,?,?)")) {
+           $stmt->bind_param("sssssssss", $last, $first, $address1, $address2, $city, $state, $zip, $phone, $email );
+            $stmt->execute();
+            $stmt->close();
+            
+            return $this->insert_id;
         }
         throw new Exception("Could not insert customer. Try again or start over.");
         
@@ -72,9 +74,12 @@ class StoreDB extends mysqli {
     
     public function insert_order($customer, $subtotal, $shipping, $tax, $total) {
         $date = date('Y-m-d H:i:s');
-        if ($this->query("INSERT INTO orders (customer, date, subtotal, shipping, tax, total) VALUES('" . $customer . "', '" . $date . "', '"
-                . $subtotal . "', '" . $shipping . "', '" . $tax . "', '" . $total . "')")){
-            return mysqli_insert_id($this);         
+        if ($stmt=$this->prepare("INSERT INTO orders (customer, date, subtotal, shipping, tax, total) VALUES(?,?,?,?,?,?)")){
+           $stmt->bind_param("isdddd", $customer,$date, $subtotal, $shipping, $tax, $total );
+            $stmt->execute();
+            $stmt->close();
+            echo 'insert successful';
+            return $this->insert_id;         
         }
         throw new Exception("Could not insert order. Try again or start over.");
     }
@@ -90,13 +95,25 @@ class StoreDB extends mysqli {
     }
     
     public function insert_user($username, $password) {
+        $stmt=$this->prepare("INSERT INTO users (username, password) VALUES (?,?)");
+           $stmt->bind_param("ss", $username, $password );
+           $qwe= $stmt->execute();
+            $stmt->close();
+            return $qwe;
         return $this->query("INSERT INTO users (username, password) VALUES ('" . $username . "', '" . $password . "')");
     }
     
     public function verify_user($username, $password) {
         //$answer = $this->query("SELECT * FROM users WHERE username='" . $username . "' AND password='" . $password . "'");
-         $result = $this->query("SELECT * FROM users WHERE username='" . $username . "' AND password='" . $password . "'");
-         if (mysqli_num_rows($result) > 0) {
+        $stmt = $this->prepare("SELECT * FROM users WHERE username=? AND password=?" );
+           $stmt->bind_param("ss", $username,$password);
+            $stmt->execute();
+            $result = $stmt->get_result(); //$result is of type mysqli_result
+            $count = $result->num_rows; 
+        
+        $result = $this->query("SELECT * FROM users WHERE username='" . $username . "' AND password='" . $password . "'");
+        if ($count > 0) {
+           
              return true;
          }
          return false;
