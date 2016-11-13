@@ -206,17 +206,17 @@ if(count($cart) > 0){
           </div>
           <div class="col-md-3">
             <label for="inputZip">Zip Code</label>
-            <input type="text" class="form-control" id="inputZip" name="inputZip" placeholder="12345" pattern="[0-9]{5}|[0-9]{9}" required title="Not a valid zip code">
+            <input type="number" class="form-control" pattern="[0-9]{5}|[0-9]{9}" id="inputZip" name="inputZip" placeholder="12345" pattern="[0-9]{5}|[0-9]{9}" required title="Not a valid zip code">
           </div>
       </div>
       <div class="form-group">      
           <div class="col-md-4">
             <label for="inputEmail">Email</label>
-            <input type="email" class="form-control" id="inputEmail" name="inputEmail" placeholder="bobdole@email.com">
+            <input type="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" class="form-control" id="inputEmail" name="inputEmail" placeholder="bobdole@email.com">
           </div>
           <div class="col-md-4">
             <label for="inputPhone">Phone Number</label>
-            <input type="tel" class="form-control" id="inputPhone" name="inputPhone" placeholder="1234567890">
+            <input type="number" pattern="[0-9]{10}" class="form-control" id="inputPhone" name="inputPhone" placeholder="1234567890">
           </div>
       </div>
 <?php } ?>
