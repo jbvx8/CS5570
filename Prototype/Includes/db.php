@@ -90,6 +90,11 @@ class StoreDB extends mysqli {
     }
     
     public function insert_user($username, $password) {
+        $stmt=$this->prepare("INSERT INTO users (username, password) VALUES (?,?)");
+           $stmt->bind_param("ss", $username, $password );
+           $qwe= $stmt->execute();
+            $stmt->close();
+            return $qwe;
         return $this->query("INSERT INTO users (username, password) VALUES ('" . $username . "', '" . $password . "')");
     }
     
