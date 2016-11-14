@@ -57,7 +57,7 @@ if($action=='exists'){ ?>
                     
                     
                     <form action='cart_session.php'>
-                        <input type='text' name='quantity' placeholder='0' size='2' />
+                        <input type='number' name='quantity' min="1" placeholder='0' size='2' />
                         <input type='hidden' name='id' value='<?php echo $PID ?>'/>
                         <input type='hidden' name='name' value='<?php echo $name ?>'/>
                         <button type='submit' class='btn btn-primary'><span class='glyphicon glyphicon-shopping-cart'></span>
