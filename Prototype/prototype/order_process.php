@@ -95,39 +95,3 @@ if (isset($_GET['action']) && $_GET['action'] == 'update') {
     }
 } ?>
 
-
-
-
-
-
-//class Verification {
-//    
-//    
-//    
-//   static function verify_payment(){
-//    if (Verification::randBool()){
-//        return true;
-//    }
-//    throw new Exception("Credit card declined by bank. Try entering a new card.");  
-//  }
-//
-//
-//    // returns true or false randomly, with false returning 15% of the time.
-//    // adapted from http://stackoverflow.com/questions/445235/generating-random-results-by-weight-in-php
-//    static function randBool() {
-//        
-//        Verification::$poop2 = 1;
-//        $weights = array(0=>15, 1=>85,);
-//        $rand = array_rand(array_sum($weights));
-//
-//        foreach ($weights as $number => $weight) {
-//            $rand -= $weight;
-//            if ($rand <= 0) {
-//                return $number;
-//            }
-//        }   
-//    } 
-//}
-
-
-?>

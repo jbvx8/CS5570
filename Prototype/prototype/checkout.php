@@ -118,7 +118,7 @@ if(count($cart) > 0){
 } else { ?>
     <hr class="top-pad-50">
     <p class="top-pad-50"><h3>2. Enter Customer Details</h3></p>
-    <form class="form-horizontal bottom-pad-50" method="post" action="order_process.php">
+    <form class="form-horizontal bottom-pad-50" method="post" action="order_process.php?action=processOrder">
       <div class="form-group">      
           <div class="col-md-4">
             <label for="inputFirst">First Name</label>
