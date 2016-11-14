@@ -42,7 +42,13 @@ class StoreDB extends mysqli {
     // returns all possible types of products from types table
     // returns null if none
     public function get_all_types() {
-        return $this->query("SELECT DISTINCT type from products");
+        $result = $this->query("SELECT DISTINCT type from products");
+        $types = array();
+        while ($row = mysqli_fetch_array($result)) {
+            array_push($types, $row["type"]);
+        }
+        mysqli_free_result($result);
+        return $types;
     }
     
     public function get_products_by_type($type) {

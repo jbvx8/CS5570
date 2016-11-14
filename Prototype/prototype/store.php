@@ -29,13 +29,36 @@ if($action=='exists'){ ?>
         <strong><?php echo $name; ?></strong> already exists in your cart; <?php echo $quantity; ?> more added!
     </div>
 <?php } ?>
-    <div class='container'>
+    <div class='container bottom-pad-50'>
+        <div class="dropdown">
+          <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+            Choose Department
+            <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+              <?php 
+              $db = StoreDB::getInstance();
+              $listTypes = $db->get_all_types();
+              foreach($listTypes as $value) {
+                echo "<li><a href='?action=" . $value . "'>" . $value . "</li>";
+              }
+
+              ?>
+              <li><a href="?">Show all</a></li>
+          </ul>
+        </div>
         
         <?php               
-            $db = StoreDB::getInstance();
-            $types = $db->get_all_types();
-            while ($r = mysqli_fetch_array($types)) {
-                $type = htmlentities($r["type"]);
+            
+            $types = array();
+            if (isset($_GET["action"])) {
+                array_push($types, $_GET["action"]);
+            } else {
+                $types = $listTypes;
+            }
+        
+            
+            foreach ($types as $type) {
                 echo "<h2>" . $type . "</h2>";
                 
                 $result = $db->get_products_by_type($type);
@@ -44,7 +67,7 @@ if($action=='exists'){ ?>
                     $PID = htmlentities($row["PID"]);
                     $description = htmlentities($row["description"]);
                     
-                    echo "<div class='col-md-3'>
+                    echo "<div class='col-md-3 bottom-pad-50'>
                         <div class='thumb'><img src=" . htmlentities($row["image"]) . "></div>      
                     
                             Title : " . $name;
@@ -55,7 +78,7 @@ if($action=='exists'){ ?>
                     echo "<p>Price: " . htmlentities($row["price"]) . "<span>"; ?>
                     
             
-                    <a class = "relative" data-toggle="popover" data-html="true" data-content="<?php 
+                    <a class = "relative left-pad-25" data-toggle="popover" data-trigger="hover" data-html="true" data-content="<?php 
                         $seconds = $db->get_second_attributes_by_product_id($PID);
                         $genre = 0;
                         while ($secondsRow = mysqli_fetch_array($seconds)) {
@@ -89,7 +112,6 @@ if($action=='exists'){ ?>
                 
             
             }
-            mysqli_free_result($types);
             echo "</div>";
 
             ?>
