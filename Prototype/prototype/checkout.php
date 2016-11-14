@@ -206,7 +206,7 @@ if(count($cart) > 0){
           </div>
           <div class="col-md-3">
             <label for="inputZip">Zip Code</label>
-            <input type="number" class="form-control" pattern="[0-9]{5}|[0-9]{9}" id="inputZip" name="inputZip" placeholder="12345" pattern="[0-9]{5}|[0-9]{9}" required title="Not a valid zip code">
+            <input type="number" class="form-control" pattern="[0-9]{5}|[0-9]{9}" minlength="5" maxlength="5" id="inputZip" name="inputZip" placeholder="12345" pattern="[0-9]{5}|[0-9]{9}" required title="Not a valid zip code">
           </div>
       </div>
       <div class="form-group">      
@@ -216,7 +216,7 @@ if(count($cart) > 0){
           </div>
           <div class="col-md-4">
             <label for="inputPhone">Phone Number</label>
-            <input type="number" pattern="[0-9]{10}" class="form-control" id="inputPhone" name="inputPhone" placeholder="1234567890">
+            <input type="number" pattern="[0-9]{10}" class="form-control" minlength="10" maxlength="10" id="inputPhone" name="inputPhone" placeholder="1234567890">
           </div>
       </div>
 <?php } ?>
@@ -233,15 +233,15 @@ if(count($cart) > 0){
           <div class="form-group">      
               <div class="col-md-4">
                 <label for="inputCC">Credit Card Number</label>
-                <input type="text" class="form-control" id="inputCC" name="inputCC" pattern="[0-9]{16}" required title="Not a valid credit card number">
+                <input type="text" class="form-control" id="inputCC" name="inputCC" minlength="16" maxlength="16" pattern="[0-9]{16}" required title="Not a valid credit card number">
               </div>
               <div class="col-md-2">
                 <label for="inputCCExp">Expiration Date</label>
-                <input type="text" class="form-control" id="inputCCExp" name="inputCCExp" placeholder="MMYY" pattern="[0-9]{4}" required title="Format must be MMYY">
+                <input type="text" class="form-control" id="inputCCExp" name="inputCCExp" placeholder="MM/YY" pattern="[0-9]{4}" minlength="4" maxlength="4" required title="Format must be MMYY">
               </div>
               <div class="col-md-2">
                 <label for="inputCVV">Security Code</label>
-                <input type="text" class="form-control" id="inputCVV" name="inputCVV" pattern="[0-9]{3}" required title="Not a valid CVV">
+                <input type="text" class="form-control" id="inputCVV" name="inputCVV" pattern="[0-9]{3}" minlength="3" maxlength="3" required title="Not a valid CVV">
               </div>
           </div>
 
