@@ -1,7 +1,7 @@
 <?php
 
 session_start();
-$PID = isset($_POST['id']) ? $_POST['id'] : "";
+$PID = isset($_POST['id']) ? htmlspecialchars($_POST['id']) : "";
 
 if(isset($_POST['action'])) {
     remove_product($PID);

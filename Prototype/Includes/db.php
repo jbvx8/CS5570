@@ -42,7 +42,7 @@ class StoreDB extends mysqli {
     // returns all possible types of products from types table
     // returns null if none
     public function get_all_types() {
-        return $this->query("SELECT type from types");
+        return $this->query("SELECT DISTINCT type from products");
     }
     
     public function get_products_by_type($type) {
@@ -53,6 +53,11 @@ class StoreDB extends mysqli {
     public function get_first_attributes_by_product_id($pid) {
         return $this->query("SELECT attribute, value FROM attributes WHERE product_id=\"" 
                 . $pid . "\" AND level='1'");
+    }
+    
+    public function get_second_attributes_by_product_id($pid) {
+        return $this->query("SELECT attribute, value FROM attributes WHERE product_id=\"" 
+                . $pid . "\" AND level='2'");
     }
     
     public function get_cart_variables($id) {

@@ -11,6 +11,10 @@
     width: 300px;
 }
 
+.popover {
+    width : 400px;
+}
+
 .row {
     position: relative;
 }

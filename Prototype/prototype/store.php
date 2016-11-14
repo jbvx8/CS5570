@@ -30,7 +30,7 @@ if($action=='exists'){ ?>
     </div>
 <?php } ?>
     <div class='container'>
-        <div class='row'>
+        
         <?php               
             $db = StoreDB::getInstance();
             $types = $db->get_all_types();
@@ -42,6 +42,7 @@ if($action=='exists'){ ?>
                 while ($row = mysqli_fetch_array($result)) {
                     $name = htmlentities($row["name"]);
                     $PID = htmlentities($row["PID"]);
+                    $description = htmlentities($row["description"]);
                     
                     echo "<div class='col-md-3'>
                         <div class='thumb'><img src=" . htmlentities($row["image"]) . "></div>      
@@ -51,13 +52,29 @@ if($action=='exists'){ ?>
                     while ($attributesRow = mysqli_fetch_array($attributes)) {
                         echo "<p>" . htmlentities(ucfirst($attributesRow["attribute"])) . " : " . htmlentities($attributesRow["value"]) . "</p>";                        
                     }
-                    echo "<p>Price: " . htmlentities($row["price"]) . "</p>";
-                    mysqli_free_result($attributes); ?>
+                    echo "<p>Price: " . htmlentities($row["price"]) . "<span>"; ?>
                     
-                    
-                    
+            
+                    <a class = "relative" data-toggle="popover" data-html="true" data-content="<?php 
+                        $seconds = $db->get_second_attributes_by_product_id($PID);
+                        $genre = 0;
+                        while ($secondsRow = mysqli_fetch_array($seconds)) {
+                            if ($secondsRow["attribute"] == "genre") {
+                                if ($genre > 0) {
+                                    echo ", " . $secondsRow["value"];
+                                } else {
+                                    echo "<br />Genre : " . $secondsRow["value"];
+                                }
+                                $genre++;
+                            } else {
+                                echo "<br />" . htmlentities(ucfirst($secondsRow["attribute"])) . " : " . htmlentities($secondsRow["value"]);
+                            }
+                        }
+                        echo "<br />Description : " . $description;
+                        ?>">info</a> <?php echo "</span></p>"; ?>
+       
                     <form action='cart_session.php'>
-                        <input type='text' name='quantity' placeholder='0' size='2' />
+                        <input type='text' name='quantity' placeholder='0' size='2' pattern="[1-9]{1}[0-9]{0,1}" required title='Values 1-99 only' />
                         <input type='hidden' name='id' value='<?php echo $PID ?>'/>
                         <input type='hidden' name='name' value='<?php echo $name ?>'/>
                         <button type='submit' class='btn btn-primary'><span class='glyphicon glyphicon-shopping-cart'></span>
@@ -65,9 +82,11 @@ if($action=='exists'){ ?>
                     </form>
                 </div>
                 <?php }
+                mysqli_free_result($attributes); 
+                mysqli_free_result($seconds);
                 mysqli_free_result($result);
                 
-                echo "</div>";
+                
             
             }
             mysqli_free_result($types);

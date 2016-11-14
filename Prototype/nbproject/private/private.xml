@@ -3,8 +3,15 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/wamp64/www/CS5570/Prototype/prototype/login.php</file>
-            <file>file:/C:/wamp64/www/CS5570/Prototype/Includes/db.php</file>
+            <file>file:/E:/CS5570_clone/CS5570/Prototype/prototype/user_orders.php</file>
+            <file>file:/E:/CS5570_clone/CS5570/Prototype/Includes/db.php</file>
+            <file>file:/E:/CS5570_clone/CS5570/Prototype/prototype/store.php</file>
+            <file>file:/E:/CS5570_clone/CS5570/Prototype/prototype/return_form.php</file>
+            <file>file:/E:/CS5570_clone/CS5570/Prototype/Includes/layout_header.php</file>
+            <file>file:/E:/CS5570_clone/CS5570/Prototype/prototype/checkout.php</file>
+            <file>file:/E:/CS5570_clone/CS5570/Prototype/prototype/order_process.php</file>
+            <file>file:/E:/CS5570_clone/CS5570/Prototype/prototype/return_print.php</file>
+            <file>file:/E:/CS5570_clone/CS5570/Prototype/Scripts/store.js</file>
         </group>
     </open-files>
 </project-private>

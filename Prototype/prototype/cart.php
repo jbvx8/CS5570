@@ -40,7 +40,7 @@ if(count($cart) > 0){
             <td><?php echo $value; ?></td>
             <td><?php echo $total; ?></td>
             <td><form name='removeForm'>
-                <input type='hidden' name='id' value='" . $PID . "'/>
+                <input type='hidden' name='id' value='<?php echo $PID ?>'/>
                 <button class='btnRemove btn-danger' type='submit' value='remove'>Remove</button></td>
                 </form>
             </td>
