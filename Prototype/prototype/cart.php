@@ -66,7 +66,7 @@ if(count($cart) > 0){
        
         <div id='checkoutDiv' style='display:none;'>
             <a href='checkout.php' class='btn btn-default'>Checkout as Guest</a>
-            <a href='login.php' class='btn btn-default'>Login</a>
+            <a href='login.php?location=checkout.php' class='btn btn-default'>Login</a>
         </div>
     <?php }
  } else { ?>

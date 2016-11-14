@@ -75,6 +75,7 @@ if($action=='exists'){ ?>
                     while ($attributesRow = mysqli_fetch_array($attributes)) {
                         echo "<p>" . htmlentities(ucfirst($attributesRow["attribute"])) . " : " . htmlentities($attributesRow["value"]) . "</p>";                        
                     }
+                    mysqli_free_result($attributes);
                     echo "<p>Price: " . htmlentities($row["price"]) . "<span>"; ?>
                     
             
@@ -93,6 +94,7 @@ if($action=='exists'){ ?>
                                 echo "<br />" . htmlentities(ucfirst($secondsRow["attribute"])) . " : " . htmlentities($secondsRow["value"]);
                             }
                         }
+                        mysqli_free_result($seconds);
                         echo "<br />Description : " . $description;
                         ?>">info</a> <?php echo "</span></p>"; ?>
        
@@ -105,8 +107,8 @@ if($action=='exists'){ ?>
                     </form>
                 </div>
                 <?php }
-                mysqli_free_result($attributes); 
-                mysqli_free_result($seconds);
+                 
+                
                 mysqli_free_result($result);
                 
                 

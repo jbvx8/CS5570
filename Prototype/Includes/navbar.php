@@ -44,12 +44,7 @@ if(isset($_GET['logout'])) {
         </li>
         <li class="active"><a href="checkout.php">Checkout </a></li>
       </ul>
-      <form class="navbar-form navbar-left">
-        <div class="form-group">
-          <input type="text" class="form-control" placeholder="Search">
-        </div>
-        <button type="submit" class="btn btn-default">Submit</button>
-      </form>
+      
       <ul class="nav navbar-nav navbar-right">
           <?php if (!isset($_SESSION['username'])) { ?>
               <li><a href="<?php echo "../prototype/login.php?location=" . urlencode($_SERVER['REQUEST_URI']);?>">Login</a></li>
