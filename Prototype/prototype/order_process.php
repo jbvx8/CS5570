@@ -76,11 +76,15 @@ if (isset($_GET['action']) && $_GET['action'] == 'update') {
     try{
         $db->begin_transaction();
         if (!isset($_SESSION['username'])) {
-            $custID = $db->insert_customer($last, $first, $address1, $address2, $city, $state, $zip, $phone, $email);
+            $custID = $db->insert_customer($last, $first, $address1, $address2, $city, $state, $zip, $phone, $email, null);
         } else {
             $custID = $db->get_customerID_from_username($_SESSION['username']);
             if (!$custID) {
-                $custID = $db->insert_customer($last, $first, $address1, $address2, $city, $state, $zip, $phone, $email);
+                $custID = $db->insert_customer($last, $first, $address1, $address2, $city, $state, $zip, $phone, $email, $_SESSION['username']);
+                $customer = $db->get_customer_from_username($username);
+                if ($customer) {
+                    $_SESSION['customer'] = $customer; 
+                }
             }
         }
         $orderID = $db->insert_order($custID, $subtotal, $shipping, $tax, $total);

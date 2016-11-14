@@ -71,9 +71,9 @@ class StoreDB extends mysqli {
                 . $id . "\"");
     }
     
-    public function insert_customer($last, $first, $address1, $address2, $city, $state, $zip, $phone, $email) {
-         if ($stmt=$this->prepare("INSERT INTO customers (last_name, first_name, address_line1, address_line2, city, state, zip, phone, email) VALUES (?,?,?,?,?,?,?,?,?)")) {
-           $stmt->bind_param("sssssssss", $last, $first, $address1, $address2, $city, $state, $zip, $phone, $email );
+    public function insert_customer($last, $first, $address1, $address2, $city, $state, $zip, $phone, $email, $username) {
+         if ($stmt=$this->prepare("INSERT INTO customers (last_name, first_name, address_line1, address_line2, city, state, zip, phone, email, user_name) VALUES (?,?,?,?,?,?,?,?,?,?)")) {
+           $stmt->bind_param("ssssssssss", $last, $first, $address1, $address2, $city, $state, $zip, $phone, $email, $username );
             $stmt->execute();
             $stmt->close();
             

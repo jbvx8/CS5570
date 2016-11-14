@@ -35,12 +35,13 @@ if($action=='exists'){ ?>
             Choose Department
             <span class="caret"></span>
           </button>
+        </div>
           <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
               <?php 
               $db = StoreDB::getInstance();
               $listTypes = $db->get_all_types();
               foreach($listTypes as $value) {
-                echo "<li><a href='?action=" . $value . "'>" . $value . "</li>";
+                echo "<li><a href='?type=" . $value . "'>" . $value . "</li>";
               }
 
               ?>
@@ -51,8 +52,8 @@ if($action=='exists'){ ?>
         <?php               
             
             $types = array();
-            if (isset($_GET["action"])) {
-                array_push($types, $_GET["action"]);
+            if (isset($_GET["type"])) {
+                array_push($types, $_GET["type"]);
             } else {
                 $types = $listTypes;
             }
